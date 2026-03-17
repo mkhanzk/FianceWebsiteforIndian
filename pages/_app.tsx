@@ -2,7 +2,6 @@
 import { DefaultSeo } from 'next-seo';
 import SEO from '../next-seo.config';
 import Layout from '../components/Layout';
-import AdSenseScript from '../components/AdSenseScript';
 import '../styles/globals.css';
 import { useEffect } from 'react';
 
@@ -18,7 +17,6 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo {...SEO} />
-      <AdSenseScript />
       <Layout>
         <Component {...pageProps} />
       </Layout>
