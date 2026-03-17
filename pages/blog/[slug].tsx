@@ -1,7 +1,6 @@
 ﻿import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo, ArticleJsonLd } from 'next-seo';
 import Link from 'next/link';
-import AdSlot from '../../components/AdSlot';
 import SectionHeading from '../../components/SectionHeading';
 import { blogPosts, BlogPost } from '../../data/blogPosts';
 
@@ -36,9 +35,6 @@ export default function BlogDetail({ post }: Props) {
             {post.content.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
-          </div>
-          <div className="my-10">
-            <AdSlot label="In-Post Ad" />
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {blogPosts.filter((item) => item.slug !== post.slug).slice(0, 3).map((item) => (

@@ -1,7 +1,6 @@
 ﻿import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 import SectionHeading from '../../components/SectionHeading';
-import AdSlot from '../../components/AdSlot';
 import { blogPosts } from '../../data/blogPosts';
 
 export default function BlogPage() {
@@ -24,9 +23,6 @@ export default function BlogPage() {
                 </div>
               </Link>
             ))}
-          </div>
-          <div className="mt-10">
-            <AdSlot label="Blog Inline Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_BLOG_INLINE} />
           </div>
         </div>
       </section>

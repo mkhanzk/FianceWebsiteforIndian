@@ -1,6 +1,5 @@
 ﻿import { NextSeo, FAQPageJsonLd } from 'next-seo';
 import Link from 'next/link';
-import AdSlot from '../../components/AdSlot';
 import CalculatorAccordion from '../../components/CalculatorAccordion';
 import FAQ from '../../components/FAQ';
 import SectionHeading from '../../components/SectionHeading';
@@ -37,7 +36,7 @@ export default function CalculatorsPage() {
         </div>
       </section>
 
-      {calculatorCategories.map((category, index) => (
+      {calculatorCategories.map((category) => (
         <section key={category.id} id={category.id} className="section-pad">
           <div className="container-max py-10">
             <div className="mb-6 flex items-center justify-between">
@@ -54,11 +53,6 @@ export default function CalculatorsPage() {
                   <CalculatorAccordion key={calc.slug} calculator={calc} />
                 ))}
             </div>
-            {index < calculatorCategories.length - 1 && (
-              <div className="mt-8">
-                <AdSlot label="Between Calculator Sections" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
-              </div>
-            )}
           </div>
         </section>
       ))}

@@ -1,6 +1,5 @@
 ﻿import { NextSeo } from 'next-seo';
 import Link from 'next/link';
-import AdSlot from '../components/AdSlot';
 import LeadForm from '../components/LeadForm';
 import SectionHeading from '../components/SectionHeading';
 import { tools } from '../data/tools';
@@ -40,7 +39,7 @@ export default function ToolsPage() {
       <section id="expense-planner" className="section-pad">
         <div className="container-max py-10">
           <SectionHeading title="Expense Planner" subtitle="Break down fixed vs variable expenses" />
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grid gap-6 lg:grid-cols-2">
             <div className="card">
               <h3 className="text-lg font-semibold text-text">Expense categories</h3>
               <p className="mt-2 text-sm text-muted">Track housing, food, transport, and lifestyle in one view.</p>
@@ -53,7 +52,12 @@ export default function ToolsPage() {
                 ))}
               </div>
             </div>
-            <AdSlot label="Tools Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+            <div className="card">
+              <h3 className="text-lg font-semibold text-text">Auto Ads</h3>
+              <p className="mt-2 text-sm text-muted">
+                Google AdSense automatically optimizes placements to maximize revenue without manual slots.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -68,8 +72,13 @@ export default function ToolsPage() {
       <section className="section-pad">
         <div className="container-max py-10">
           <SectionHeading title="Lead Capture" subtitle="Generate high-intent financial leads" />
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <AdSlot label="Lead Magnet Banner" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="card">
+              <h3 className="text-lg font-semibold text-text">High-intent lead magnet</h3>
+              <p className="mt-2 text-sm text-muted">
+                Offer a free financial plan to convert visitors into qualified leads.
+              </p>
+            </div>
             <LeadForm />
           </div>
         </div>

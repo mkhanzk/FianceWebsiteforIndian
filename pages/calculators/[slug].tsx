@@ -3,7 +3,6 @@ import { NextSeo, FAQPageJsonLd } from 'next-seo';
 import Link from 'next/link';
 import CalculatorCard from '../../components/CalculatorCard';
 import SectionHeading from '../../components/SectionHeading';
-import AdSlot from '../../components/AdSlot';
 import LeadForm from '../../components/LeadForm';
 import FAQ from '../../components/FAQ';
 import { calculatorSlugs, getCalculatorBySlug, calculators } from '../../data/calculators';
@@ -35,7 +34,6 @@ export default function CalculatorDetail({ slug }: Props) {
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <CalculatorCard calculator={calculator} />
             <div className="space-y-4">
-              <AdSlot label="Sidebar Ad" />
               <div className="rounded-2xl bg-surface p-6 shadow-card">
                 <p className="text-sm font-semibold text-text">Why RupeePlanner</p>
                 <ul className="mt-3 space-y-2 text-sm text-muted">

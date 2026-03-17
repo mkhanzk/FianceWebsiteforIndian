@@ -1,7 +1,6 @@
 ﻿import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 import { ArrowRight, BadgeCheck, TrendingUp, Shield } from 'lucide-react';
-import AdSlot from '../components/AdSlot';
 import LeadForm from '../components/LeadForm';
 import SectionHeading from '../components/SectionHeading';
 import { tips } from '../data/tips';
@@ -65,7 +64,6 @@ export default function Home() {
             </div>
           </div>
           <div className="space-y-6">
-            <AdSlot label="Top Banner Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
             <div className="rounded-3xl bg-surface p-6 shadow-card">
               <p className="text-sm font-semibold text-text">Your Financial Dashboard</p>
               <p className="mt-2 text-xs text-muted">Track EMI, SIP, and tax in one view.</p>
@@ -151,11 +149,23 @@ export default function Home() {
 
       <section className="section-pad">
         <div className="container-max py-12">
-          <SectionHeading title="Monetization" subtitle="Ad placements and affiliate partners" />
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <div className="space-y-4">
-              <AdSlot label="Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
-              <AdSlot label="In-Content Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
+          <SectionHeading title="Monetization" subtitle="Auto ads and affiliate partners" />
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="card">
+              <h3 className="text-lg font-semibold text-text">Auto Ads Enabled</h3>
+              <p className="mt-2 text-sm text-muted">
+                Google AdSense will automatically place ads across the site for best performance and revenue.
+              </p>
+              <div className="mt-6 grid gap-3 md:grid-cols-2">
+                <div className="rounded-2xl bg-base p-4">
+                  <p className="text-xs text-muted">Placement control</p>
+                  <p className="text-lg font-semibold text-text">Auto</p>
+                </div>
+                <div className="rounded-2xl bg-base p-4">
+                  <p className="text-xs text-muted">Optimization</p>
+                  <p className="text-lg font-semibold text-text">Enabled</p>
+                </div>
+              </div>
             </div>
             <div className="card">
               <h3 className="text-lg font-semibold text-text">Affiliate Partners</h3>
