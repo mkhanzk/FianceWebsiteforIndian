@@ -26,7 +26,7 @@ export default function BlogPage() {
             ))}
           </div>
           <div className="mt-10">
-            <AdSlot label="Blog Inline Ad" />
+            <AdSlot label="Blog Inline Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_BLOG_INLINE} />
           </div>
         </div>
       </section>

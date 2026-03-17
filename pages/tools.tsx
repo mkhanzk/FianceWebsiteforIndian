@@ -53,7 +53,7 @@ export default function ToolsPage() {
                 ))}
               </div>
             </div>
-            <AdSlot label="Tools Sidebar Ad" />
+            <AdSlot label="Tools Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
           </div>
         </div>
       </section>
@@ -69,7 +69,7 @@ export default function ToolsPage() {
         <div className="container-max py-10">
           <SectionHeading title="Lead Capture" subtitle="Generate high-intent financial leads" />
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <AdSlot label="Lead Magnet Banner" />
+            <AdSlot label="Lead Magnet Banner" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
             <LeadForm />
           </div>
         </div>

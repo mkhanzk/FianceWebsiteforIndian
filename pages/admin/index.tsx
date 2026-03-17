@@ -29,8 +29,8 @@ export default function AdminPage() {
                 <h3 className="text-lg font-semibold text-text">Ad Slots</h3>
                 <p className="mt-2 text-sm text-muted">Replace placeholders with AdSense or affiliate embeds.</p>
                 <div className="mt-4 grid gap-3 md:grid-cols-2">
-                  <AdSlot label="Header Ad" />
-                  <AdSlot label="Sidebar Ad" />
+                  <AdSlot label="Header Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
+                  <AdSlot label="Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
                 </div>
               </div>
             </div>

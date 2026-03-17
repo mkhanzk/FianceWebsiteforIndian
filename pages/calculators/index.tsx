@@ -56,7 +56,7 @@ export default function CalculatorsPage() {
             </div>
             {index < calculatorCategories.length - 1 && (
               <div className="mt-8">
-                <AdSlot label="Between Calculator Sections" />
+                <AdSlot label="Between Calculator Sections" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
               </div>
             )}
           </div>

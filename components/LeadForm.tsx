@@ -9,7 +9,9 @@ const LeadForm = () => {
     const payload = {
       name: String(form.get('name') || ''),
       email: String(form.get('email') || ''),
-      phone: String(form.get('phone') || '')
+      phone: String(form.get('phone') || ''),
+      pageUrl: typeof window !== 'undefined' ? window.location.href : '',
+      referrer: typeof document !== 'undefined' ? document.referrer : ''
     };
     setStatus('loading');
     try {

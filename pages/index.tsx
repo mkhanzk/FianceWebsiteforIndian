@@ -9,6 +9,7 @@ import { tools } from '../data/tools';
 import { blogPosts } from '../data/blogPosts';
 import { affiliates } from '../data/affiliates';
 import { calculators } from '../data/calculators';
+import { withAffiliate } from '../lib/affiliate';
 
 const quickCalculators = calculators.slice(0, 6);
 
@@ -64,7 +65,7 @@ export default function Home() {
             </div>
           </div>
           <div className="space-y-6">
-            <AdSlot label="Top Banner Ad" />
+            <AdSlot label="Top Banner Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
             <div className="rounded-3xl bg-surface p-6 shadow-card">
               <p className="text-sm font-semibold text-text">Your Financial Dashboard</p>
               <p className="mt-2 text-xs text-muted">Track EMI, SIP, and tax in one view.</p>
@@ -153,8 +154,8 @@ export default function Home() {
           <SectionHeading title="Monetization" subtitle="Ad placements and affiliate partners" />
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <div className="space-y-4">
-              <AdSlot label="Sidebar Ad" />
-              <AdSlot label="In-Content Ad" />
+              <AdSlot label="Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+              <AdSlot label="In-Content Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
             </div>
             <div className="card">
               <h3 className="text-lg font-semibold text-text">Affiliate Partners</h3>
@@ -163,7 +164,12 @@ export default function Home() {
                   <div key={partner.name} className="rounded-2xl border border-white/10 p-4">
                     <p className="text-sm font-semibold text-text">{partner.name}</p>
                     <p className="text-xs text-muted">{partner.description}</p>
-                    <a className="mt-2 inline-flex text-xs font-semibold text-accent" href={partner.href}>
+                    <a
+                      className="mt-2 inline-flex text-xs font-semibold text-accent"
+                      href={withAffiliate(partner.href, partner.trackingParam)}
+                      target="_blank"
+                      rel="noreferrer nofollow sponsored"
+                    >
                       View offer
                     </a>
                   </div>
