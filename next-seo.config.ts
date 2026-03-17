@@ -1,9 +1,12 @@
-﻿const siteUrl = 'https://rupeeplanner.in';
+import type { DefaultSeoProps } from 'next-seo';
+
+const siteUrl = 'https://rupeeplanner.in';
 
 const title = 'RupeePlanner - Smart Financial Planning for Every Indian';
-const description = 'RupeePlanner helps Indians calculate loans, investments, tax, retirement, and savings with modern calculators, insights, and downloadable reports.';
+const description =
+  'RupeePlanner helps Indians calculate loans, investments, tax, retirement, and savings with modern calculators, insights, and downloadable reports.';
 
-module.exports = {
+const seoConfig: DefaultSeoProps = {
   title,
   description,
   canonical: siteUrl,
@@ -33,3 +36,5 @@ module.exports = {
     { rel: 'manifest', href: '/manifest.json' }
   ]
 };
+
+export default seoConfig;
