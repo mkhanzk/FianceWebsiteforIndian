@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿# RupeePlanner.in
 
 A modern multi-page financial planning website for Indian users with calculators, SEO, monetization placeholders, and lead capture.
@@ -38,3 +39,6 @@ The endpoint `POST /api/leads` stores leads in `data/leads.json` for local devel
 ## Notes
 - Replace `public/og-cover.png` and `public/icons/icon.svg` with your brand assets.
 - Tax slab values are sample defaults. Update them to match current regulations.
+=======
+# FianceWebsiteforIndian
+>>>>>>> ce0d072192080699c9edaefe5d587f52b0280a3d
