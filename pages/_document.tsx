@@ -1,7 +1,8 @@
-﻿import { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
   const themeScript = `(() => { try { const stored = localStorage.getItem('theme'); const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; const theme = stored || (prefersDark ? 'dark' : 'light'); if (theme === 'dark') document.documentElement.classList.add('dark'); } catch (e) {} })();`;
+  const gtagScript = `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-18039249955');`;
 
   return (
     <Html lang="en">
@@ -20,6 +21,8 @@ export default function Document() {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1240078050190059"
           crossOrigin="anonymous"
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18039249955" />
+        <script dangerouslySetInnerHTML={{ __html: gtagScript }} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </Head>
       <body>
