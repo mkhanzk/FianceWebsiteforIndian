@@ -1,16 +1,41 @@
 ﻿import Link from 'next/link';
 import { NextSeo } from 'next-seo';
 import { ArrowRight, BadgeCheck, TrendingUp, Shield } from 'lucide-react';
+import AdSlot from '../components/AdSlot';
 import LeadForm from '../components/LeadForm';
 import SectionHeading from '../components/SectionHeading';
+import ChartBlock from '../components/ChartBlock';
 import { tips } from '../data/tips';
 import { tools } from '../data/tools';
 import { blogPosts } from '../data/blogPosts';
 import { affiliates } from '../data/affiliates';
 import { calculators } from '../data/calculators';
 import { withAffiliate } from '../lib/affiliate';
+import { dashboardMonths } from '../data/financeDashboard';
+import { formatINR, formatPercent } from '../lib/format';
 
 const quickCalculators = calculators.slice(0, 6);
+const previewMonths = dashboardMonths.slice(-6);
+const latestMonth = dashboardMonths[dashboardMonths.length - 1];
+const previousMonth = dashboardMonths[dashboardMonths.length - 2];
+const latestProfit = latestMonth.revenue - latestMonth.expenses;
+const revenueDelta = previousMonth ? ((latestMonth.revenue - previousMonth.revenue) / previousMonth.revenue) * 100 : 0;
+const expenseDelta = previousMonth ? ((latestMonth.expenses - previousMonth.expenses) / previousMonth.expenses) * 100 : 0;
+const dashboardPreviewChart = {
+  type: 'line' as const,
+  data: {
+    labels: previewMonths.map((month) => month.label),
+    datasets: [
+      {
+        label: 'Revenue',
+        data: previewMonths.map((month) => month.revenue),
+        borderColor: '#0F9D58',
+        backgroundColor: 'rgba(15, 157, 88, 0.2)',
+        tension: 0.35
+      }
+    ]
+  }
+};
 
 export default function Home() {
   return (
@@ -64,22 +89,35 @@ export default function Home() {
             </div>
           </div>
           <div className="space-y-6">
-            <div className="rounded-3xl bg-surface p-6 shadow-card">
-              <p className="text-sm font-semibold text-text">Your Financial Dashboard</p>
-              <p className="mt-2 text-xs text-muted">Track EMI, SIP, and tax in one view.</p>
-              <div className="mt-6 grid gap-4">
+            <AdSlot label="Top Banner Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
+            <div className="rounded-3xl border border-white/10 bg-surface p-6 shadow-card">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Dashboard Preview</p>
+              <h3 className="mt-2 text-lg font-semibold text-text">Live finance snapshot</h3>
+              <div className="mt-4 grid gap-3 md:grid-cols-3">
                 <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Monthly EMIs</p>
-                  <p className="text-lg font-semibold text-text">INR 42,600</p>
+                  <p className="text-xs text-muted">Revenue</p>
+                  <p className="text-lg font-semibold text-text">{formatINR(latestMonth.revenue)}</p>
+                  <p className="mt-1 text-xs text-emerald-500">{formatPercent(revenueDelta)}</p>
                 </div>
                 <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Monthly SIP</p>
-                  <p className="text-lg font-semibold text-text">INR 12,000</p>
+                  <p className="text-xs text-muted">Expenses</p>
+                  <p className="text-lg font-semibold text-text">{formatINR(latestMonth.expenses)}</p>
+                  <p className="mt-1 text-xs text-rose-500">{formatPercent(expenseDelta)}</p>
                 </div>
                 <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Tax Savings</p>
-                  <p className="text-lg font-semibold text-text">INR 1.2L</p>
+                  <p className="text-xs text-muted">Net Profit</p>
+                  <p className="text-lg font-semibold text-text">{formatINR(latestProfit)}</p>
+                  <p className="mt-1 text-xs text-muted">Last 30 days</p>
                 </div>
+              </div>
+              <div className="mt-4 rounded-2xl bg-base p-4">
+                <ChartBlock chart={dashboardPreviewChart} />
+              </div>
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-xs text-muted">View detailed analytics and request tracking.</p>
+                <Link href="/dashboard" className="btn-secondary">
+                  Open Dashboard
+                </Link>
               </div>
             </div>
           </div>
@@ -149,23 +187,11 @@ export default function Home() {
 
       <section className="section-pad">
         <div className="container-max py-12">
-          <SectionHeading title="Monetization" subtitle="Auto ads and affiliate partners" />
-          <div className="grid gap-6 lg:grid-cols-2">
-            <div className="card">
-              <h3 className="text-lg font-semibold text-text">Auto Ads Enabled</h3>
-              <p className="mt-2 text-sm text-muted">
-                Google AdSense will automatically place ads across the site for best performance and revenue.
-              </p>
-              <div className="mt-6 grid gap-3 md:grid-cols-2">
-                <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Placement control</p>
-                  <p className="text-lg font-semibold text-text">Auto</p>
-                </div>
-                <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Optimization</p>
-                  <p className="text-lg font-semibold text-text">Enabled</p>
-                </div>
-              </div>
+          <SectionHeading title="Monetization" subtitle="Ad placements and affiliate partners" />
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <div className="space-y-4">
+              <AdSlot label="Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+              <AdSlot label="In-Content Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
             </div>
             <div className="card">
               <h3 className="text-lg font-semibold text-text">Affiliate Partners</h3>

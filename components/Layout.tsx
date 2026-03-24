@@ -2,15 +2,18 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import { RequestModalProvider } from './RequestModalContext';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-      <Breadcrumbs />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
+    <RequestModalProvider>
+      <div className="flex min-h-screen flex-col">
+        <Navbar />
+        <Breadcrumbs />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
+    </RequestModalProvider>
   );
 };
 

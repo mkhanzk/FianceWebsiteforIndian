@@ -6,11 +6,16 @@
   color-scheme: light;
   --bg: 246 248 251;
   --surface: 255 255 255;
+  --surface-2: 242 246 250;
   --text: 11 60 93;
   --muted: 91 107 122;
   --accent: 15 157 88;
   --accent-2: 11 60 93;
   --ring: 15 157 88;
+  --success: 16 185 129;
+  --warning: 234 179 8;
+  --danger: 239 68 68;
+  --info: 56 189 248;
   --font-sans: 'Poppins', 'Inter';
 }
 
@@ -18,11 +23,16 @@
   color-scheme: dark;
   --bg: 11 18 32;
   --surface: 17 24 39;
+  --surface-2: 15 23 42;
   --text: 226 232 240;
   --muted: 148 163 184;
   --accent: 34 197 94;
   --accent-2: 56 189 248;
   --ring: 56 189 248;
+  --success: 16 185 129;
+  --warning: 234 179 8;
+  --danger: 248 113 113;
+  --info: 56 189 248;
 }
 
 html {
@@ -32,9 +42,10 @@ html {
 body {
   @apply bg-base text-text font-sans antialiased;
   background-image:
-    radial-gradient(circle at 15% 20%, rgba(15, 157, 88, 0.12), transparent 45%),
-    radial-gradient(circle at 85% 10%, rgba(11, 60, 93, 0.18), transparent 40%),
-    linear-gradient(120deg, rgba(15, 157, 88, 0.06), rgba(11, 60, 93, 0.04));
+    radial-gradient(circle at 20% 15%, rgba(15, 157, 88, 0.14), transparent 45%),
+    radial-gradient(circle at 80% 12%, rgba(11, 60, 93, 0.16), transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(56, 189, 248, 0.08), transparent 40%),
+    linear-gradient(120deg, rgba(15, 157, 88, 0.08), rgba(11, 60, 93, 0.05));
   min-height: 100vh;
 }
 
@@ -62,19 +73,19 @@ body {
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:scale-[1.01] hover:bg-[#0b8e50];
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-[#0b8e50];
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center gap-2 rounded-full border border-accent/30 px-5 py-2.5 text-sm font-semibold text-accent transition hover:bg-accent/10;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-accent/30 px-5 py-2.5 text-sm font-semibold text-accent transition hover:bg-accent/10;
 }
 
 .card {
-  @apply rounded-2xl bg-surface p-6 shadow-card transition hover:-translate-y-1;
+  @apply rounded-3xl border border-white/10 bg-surface p-6 shadow-card transition hover:-translate-y-1;
 }
 
 .input {
-  @apply w-full rounded-xl border border-transparent bg-base px-4 py-2 text-sm text-text shadow-sm ring-1 ring-transparent transition focus:outline-none focus:ring-2 focus:ring-accent/30 dark:bg-slate-900;
+  @apply w-full rounded-xl border border-white/10 bg-base px-4 py-2 text-sm text-text shadow-sm ring-1 ring-transparent transition focus:outline-none focus:ring-2 focus:ring-accent/30 dark:bg-slate-900;
 }
 
 .label {

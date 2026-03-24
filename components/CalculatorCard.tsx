@@ -166,6 +166,17 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
             </table>
           </div>
 
+          {result.insights && result.insights.length > 0 && (
+            <div className="rounded-2xl bg-surface p-4 shadow-card">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Insights</p>
+              <ul className="mt-2 space-y-2 text-sm text-muted">
+                {result.insights.map((insight) => (
+                  <li key={insight}>{insight}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {result.disclaimer && (
             <p className="text-xs text-muted">{result.disclaimer}</p>
           )}

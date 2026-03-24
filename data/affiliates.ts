@@ -21,11 +21,11 @@ export const affiliates: Affiliate[] = [
   {
     name: 'Banking Partners',
     description: 'Compare home loan, personal loan, and credit card offers.',
-    href: '#'
+    href: '/partners/banking'
   },
   {
     name: 'Insurance Partners',
     description: 'Find term and health plans that match your goals.',
-    href: '#'
+    href: '/partners/insurance'
   }
 ];

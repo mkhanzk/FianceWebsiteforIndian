@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
+import { useRequestModal } from './RequestModalContext';
 
 const navItems = [
-  { label: 'Home', href: '/' },
+  { label: 'Dashboard', href: '/dashboard' },
   { label: 'Calculators', href: '/calculators' },
   { label: 'Tools', href: '/tools' },
   { label: 'Blog', href: '/blog' },
@@ -15,6 +16,7 @@ const navItems = [
 const Navbar = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const { open: openRequest } = useRequestModal();
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-base/90 backdrop-blur">
@@ -40,9 +42,9 @@ const Navbar = () => {
               );
             })}
             <ThemeToggle />
-            <Link href="#lead-form" className="btn-primary">
+            <button type="button" className="btn-primary" onClick={openRequest}>
               Get Free Plan
-            </Link>
+            </button>
           </nav>
           <div className="flex items-center gap-3 md:hidden">
             <ThemeToggle />
@@ -69,9 +71,16 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
-              <Link href="#lead-form" className="btn-primary" onClick={() => setOpen(false)}>
+              <button
+                type="button"
+                className="btn-primary"
+                onClick={() => {
+                  setOpen(false);
+                  openRequest();
+                }}
+              >
                 Get Free Plan
-              </Link>
+              </button>
             </div>
           </div>
         )}

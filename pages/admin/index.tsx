@@ -1,5 +1,6 @@
 ﻿import { NextSeo } from 'next-seo';
 import SectionHeading from '../../components/SectionHeading';
+import AdSlot from '../../components/AdSlot';
 import { blogPosts } from '../../data/blogPosts';
 
 export default function AdminPage() {
@@ -25,10 +26,12 @@ export default function AdminPage() {
                 </div>
               </div>
               <div className="card">
-                <h3 className="text-lg font-semibold text-text">AdSense Auto Ads</h3>
-                <p className="mt-2 text-sm text-muted">
-                  Auto Ads are enabled globally. Manage placements inside your AdSense dashboard.
-                </p>
+                <h3 className="text-lg font-semibold text-text">Ad Slots</h3>
+                <p className="mt-2 text-sm text-muted">Replace placeholders with AdSense or affiliate embeds.</p>
+                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                  <AdSlot label="Header Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
+                  <AdSlot label="Sidebar Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />
+                </div>
               </div>
             </div>
             <div className="space-y-4">
