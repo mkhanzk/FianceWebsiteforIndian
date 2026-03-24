@@ -2,7 +2,6 @@
 import { NextSeo } from 'next-seo';
 import { ArrowRight, BadgeCheck, TrendingUp, Shield } from 'lucide-react';
 import AdSlot from '../components/AdSlot';
-import LeadForm from '../components/LeadForm';
 import SectionHeading from '../components/SectionHeading';
 import ChartBlock from '../components/ChartBlock';
 import { tips } from '../data/tips';
@@ -218,25 +217,26 @@ export default function Home() {
 
       <section className="section-pad">
         <div className="container-max py-12">
-          <SectionHeading title="Call To Action" subtitle="Get your custom financial roadmap" />
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <SectionHeading title="Start Planning" subtitle="Use calculators for detailed breakdowns" />
+          <div className="grid gap-6 md:grid-cols-2">
             <div className="card">
-              <h3 className="text-lg font-semibold text-text">Let our partners build your plan</h3>
+              <h3 className="text-lg font-semibold text-text">Loan & EMI calculators</h3>
               <p className="mt-2 text-sm text-muted">
-                Share your goals and we will connect you to trusted advisors for loans, investments, and insurance.
+                Estimate EMIs, interest, and schedules with sliders and amortization tables.
               </p>
-              <div className="mt-6 grid gap-3 md:grid-cols-2">
-                <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Average response time</p>
-                  <p className="text-lg font-semibold text-text">15 minutes</p>
-                </div>
-                <div className="rounded-2xl bg-base p-4">
-                  <p className="text-xs text-muted">Lead conversion</p>
-                  <p className="text-lg font-semibold text-text">High intent</p>
-                </div>
-              </div>
+              <Link href="/calculators/emi-calculator" className="mt-4 inline-flex text-xs font-semibold text-accent">
+                Open EMI Calculator
+              </Link>
             </div>
-            <LeadForm />
+            <div className="card">
+              <h3 className="text-lg font-semibold text-text">Tax calculators</h3>
+              <p className="mt-2 text-sm text-muted">
+                Compare regimes, evaluate deductions, and understand your tax liability.
+              </p>
+              <Link href="/calculators/income-tax-calculator" className="mt-4 inline-flex text-xs font-semibold text-accent">
+                Open Income Tax Calculator
+              </Link>
+            </div>
           </div>
         </div>
       </section>

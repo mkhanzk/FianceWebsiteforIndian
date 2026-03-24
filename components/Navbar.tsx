@@ -3,20 +3,16 @@ import { useRouter } from 'next/router';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
-import { useRequestModal } from './RequestModalContext';
 
 const navItems = [
   { label: 'Calculators', href: '/calculators' },
   { label: 'Tools', href: '/tools' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Admin', href: '/admin' }
+  { label: 'Blog', href: '/blog' }
 ];
 
 const Navbar = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { open: openRequest } = useRequestModal();
-
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-base/90 backdrop-blur">
       <div className="section-pad">
@@ -41,9 +37,9 @@ const Navbar = () => {
               );
             })}
             <ThemeToggle />
-            <button type="button" className="btn-primary" onClick={openRequest}>
-              Get Free Plan
-            </button>
+            <Link href="/calculators" className="btn-primary">
+              Start Calculating
+            </Link>
           </nav>
           <div className="flex items-center gap-3 md:hidden">
             <ThemeToggle />
@@ -70,16 +66,9 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
-              <button
-                type="button"
-                className="btn-primary"
-                onClick={() => {
-                  setOpen(false);
-                  openRequest();
-                }}
-              >
-                Get Free Plan
-              </button>
+              <Link href="/calculators" className="btn-primary" onClick={() => setOpen(false)}>
+                Start Calculating
+              </Link>
             </div>
           </div>
         )}

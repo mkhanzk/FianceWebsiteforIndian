@@ -1,7 +1,6 @@
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
 import AdSlot from '../components/AdSlot';
-import LeadForm from '../components/LeadForm';
 import SectionHeading from '../components/SectionHeading';
 import { tools } from '../data/tools';
 import { getCalculatorBySlug } from '../data/calculators';
@@ -81,14 +80,26 @@ export default function ToolsPage() {
 
       <section className="section-pad">
         <div className="container-max py-10">
-          <SectionHeading title="Lead Capture" subtitle="Generate high-intent financial leads" />
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <AdSlot label="Lead Magnet Banner" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
-            <LeadForm />
+          <SectionHeading title="Continue Planning" subtitle="Explore more calculators" />
+          <div className="grid gap-4 md:grid-cols-3">
+            <Link href="/calculators/emi-calculator" className="card">
+              <h3 className="text-lg font-semibold text-text">EMI Calculator</h3>
+              <p className="mt-2 text-sm text-muted">Calculate monthly EMIs with schedules.</p>
+              <span className="mt-4 inline-flex text-xs font-semibold text-accent">Open tool</span>
+            </Link>
+            <Link href="/calculators/home-loan-calculator" className="card">
+              <h3 className="text-lg font-semibold text-text">Home Loan Calculator</h3>
+              <p className="mt-2 text-sm text-muted">Plan repayment and interest breakups.</p>
+              <span className="mt-4 inline-flex text-xs font-semibold text-accent">Open tool</span>
+            </Link>
+            <Link href="/calculators/income-tax-calculator" className="card">
+              <h3 className="text-lg font-semibold text-text">Income Tax Calculator</h3>
+              <p className="mt-2 text-sm text-muted">Compare old vs new regime quickly.</p>
+              <span className="mt-4 inline-flex text-xs font-semibold text-accent">Open tool</span>
+            </Link>
           </div>
         </div>
       </section>
     </>
   );
 }
-
