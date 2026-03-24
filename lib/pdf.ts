@@ -7,6 +7,7 @@ type PdfPayload = {
   inputs: PdfRow[];
   summary: PdfRow[];
   chartImage?: string;
+  schedule?: PdfRow[];
 };
 
 type DashboardPdfPayload = {
@@ -21,7 +22,7 @@ type DashboardPdfPayload = {
   requests?: { label: string; value: string }[];
 };
 
-export const downloadCalculatorPdf = ({ title, inputs, summary, chartImage }: PdfPayload): void => {
+export const downloadCalculatorPdf = ({ title, inputs, summary, chartImage, schedule }: PdfPayload): void => {
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const marginX = 40;
   let cursorY = 50;
@@ -56,6 +57,18 @@ export const downloadCalculatorPdf = ({ title, inputs, summary, chartImage }: Pd
     doc.text(`${row.label}: ${row.value}`, marginX, cursorY);
     cursorY += 16;
   });
+
+  if (schedule && schedule.length > 0) {
+    cursorY += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.text('Schedule', marginX, cursorY);
+    cursorY += 16;
+    doc.setFont('helvetica', 'normal');
+    schedule.slice(0, 12).forEach((row) => {
+      doc.text(`${row.label}: ${row.value}`, marginX, cursorY);
+      cursorY += 14;
+    });
+  }
 
   if (chartImage) {
     cursorY += 12;

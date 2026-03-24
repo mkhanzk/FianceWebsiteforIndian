@@ -25,7 +25,6 @@ const Footer = () => {
         <div>
           <p className="text-sm font-semibold text-text">Company</p>
           <ul className="mt-3 space-y-2 text-sm text-muted">
-            <li><Link href="/dashboard">Dashboard</Link></li>
             <li><Link href="/tools">Tools</Link></li>
             <li><Link href="/blog">Blog</Link></li>
             <li><Link href="/partners/banking">Partners</Link></li>

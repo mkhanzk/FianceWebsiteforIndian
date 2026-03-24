@@ -52,7 +52,13 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
       title: calculator.title,
       inputs,
       summary: result.summary.map((item) => ({ label: item.label, value: item.value })),
-      chartImage
+      chartImage,
+      schedule: result.schedule
+        ? result.schedule.map((row) => ({
+            label: row.label,
+            value: `Principal ${row.principal} | Interest ${row.interest} | Balance ${row.balance}`
+          }))
+        : undefined
     });
   };
 
@@ -273,4 +279,3 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
 };
 
 export default CalculatorCard;
-

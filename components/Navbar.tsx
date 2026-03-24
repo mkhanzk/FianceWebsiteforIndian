@@ -6,7 +6,6 @@ import ThemeToggle from './ThemeToggle';
 import { useRequestModal } from './RequestModalContext';
 
 const navItems = [
-  { label: 'Dashboard', href: '/dashboard' },
   { label: 'Calculators', href: '/calculators' },
   { label: 'Tools', href: '/tools' },
   { label: 'Blog', href: '/blog' },

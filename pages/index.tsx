@@ -91,8 +91,8 @@ export default function Home() {
           <div className="space-y-6">
             <AdSlot label="Top Banner Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP_BANNER} />
             <div className="rounded-3xl border border-white/10 bg-surface p-6 shadow-card">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Dashboard Preview</p>
-              <h3 className="mt-2 text-lg font-semibold text-text">Live finance snapshot</h3>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Financial Snapshot</p>
+              <h3 className="mt-2 text-lg font-semibold text-text">Loan and investment overview</h3>
               <div className="mt-4 grid gap-3 md:grid-cols-3">
                 <div className="rounded-2xl bg-base p-4">
                   <p className="text-xs text-muted">Revenue</p>
@@ -114,9 +114,9 @@ export default function Home() {
                 <ChartBlock chart={dashboardPreviewChart} />
               </div>
               <div className="mt-4 flex items-center justify-between">
-                <p className="text-xs text-muted">View detailed analytics and request tracking.</p>
-                <Link href="/dashboard" className="btn-secondary">
-                  Open Dashboard
+                <p className="text-xs text-muted">Use calculators for detailed breakdowns and schedules.</p>
+                <Link href="/calculators" className="btn-secondary">
+                  Explore Calculators
                 </Link>
               </div>
             </div>
