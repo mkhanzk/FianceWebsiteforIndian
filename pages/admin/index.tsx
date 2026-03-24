@@ -1,4 +1,5 @@
-﻿import { NextSeo } from 'next-seo';
+import { GetServerSideProps } from 'next';
+import { NextSeo } from 'next-seo';
 import SectionHeading from '../../components/SectionHeading';
 import AdSlot from '../../components/AdSlot';
 import { blogPosts } from '../../data/blogPosts';
@@ -50,3 +51,32 @@ export default function AdminPage() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const user = process.env.ADMIN_USER;
+  const pass = process.env.ADMIN_PASS;
+
+  if (!user || !pass) {
+    return { notFound: true };
+  }
+
+  const auth = req.headers.authorization;
+  if (!auth || !auth.startsWith('Basic ')) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="RupeePlanner Admin"');
+    res.statusCode = 401;
+    res.end('Authentication required.');
+    return { props: {} };
+  }
+
+  const encoded = auth.split(' ')[1] ?? '';
+  const [inputUser, inputPass] = Buffer.from(encoded, 'base64').toString().split(':');
+  if (inputUser !== user || inputPass !== pass) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="RupeePlanner Admin"');
+    res.statusCode = 401;
+    res.end('Invalid credentials.');
+    return { props: {} };
+  }
+
+  return { props: {} };
+};
+

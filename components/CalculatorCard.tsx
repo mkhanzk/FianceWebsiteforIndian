@@ -1,4 +1,4 @@
-﻿import { Download, Share2, Camera } from 'lucide-react';
+import { Download, Share2, Camera, Table } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { CalculatorConfig } from '../data/calculators';
@@ -54,6 +54,23 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
       summary: result.summary.map((item) => ({ label: item.label, value: item.value })),
       chartImage
     });
+  };
+
+  const handleDownloadCsv = () => {
+    if (!result.schedule) return;
+    const rows = [
+      ['Year', 'Principal Paid', 'Interest Paid', 'Balance'],
+      ...result.schedule.map((row) => [row.label, row.principal, row.interest, row.balance])
+    ];
+    const csv = rows.map((row) => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${calculator.slug}-schedule.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setStatus('Schedule downloaded.');
   };
 
   const handleShare = async () => {
@@ -113,18 +130,37 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
                   ))}
                 </select>
               ) : (
-                <div className="flex items-center gap-3">
-                  <input
-                    className="input"
-                    type="number"
-                    min={input.min}
-                    max={input.max}
-                    step={input.step}
-                    value={values[input.id]}
-                    onChange={(event) => handleChange(input.id, event.target.value)}
-                  />
-                  {input.unit && (
-                    <span className="min-w-[52px] text-xs font-semibold text-muted">{input.unit}</span>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <input
+                      className="input"
+                      type="number"
+                      min={input.min}
+                      max={input.max}
+                      step={input.step}
+                      value={values[input.id]}
+                      onChange={(event) => handleChange(input.id, event.target.value)}
+                    />
+                    {input.unit && (
+                      <span className="min-w-[52px] text-xs font-semibold text-muted">{input.unit}</span>
+                    )}
+                  </div>
+                  {input.min !== undefined && input.max !== undefined && (
+                    <div className="space-y-1">
+                      <input
+                        className="range"
+                        type="range"
+                        min={input.min}
+                        max={input.max}
+                        step={input.step ?? 1}
+                        value={values[input.id]}
+                        onChange={(event) => handleChange(input.id, event.target.value)}
+                      />
+                      <div className="flex items-center justify-between text-[11px] text-muted">
+                        <span>{formatInputValue(input.min, input.unit)}</span>
+                        <span>{formatInputValue(input.max, input.unit)}</span>
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
@@ -166,6 +202,40 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
             </table>
           </div>
 
+          {result.schedule && result.schedule.length > 0 && (
+            <div className="rounded-2xl border border-white/10 bg-surface p-4 shadow-card">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Amortization Schedule</p>
+                <button type="button" className="btn-secondary" onClick={handleDownloadCsv}>
+                  <Table size={16} />
+                  Download CSV
+                </button>
+              </div>
+              <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
+                <table className="w-full text-sm">
+                  <thead className="bg-base text-muted">
+                    <tr>
+                      <th className="px-4 py-2 text-left">Year</th>
+                      <th className="px-4 py-2 text-left">Principal Paid</th>
+                      <th className="px-4 py-2 text-left">Interest Paid</th>
+                      <th className="px-4 py-2 text-left">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.schedule.map((row) => (
+                      <tr key={row.label} className="border-t border-white/10">
+                        <td className="px-4 py-2 text-muted">{row.label}</td>
+                        <td className="px-4 py-2 text-text">{row.principal}</td>
+                        <td className="px-4 py-2 text-text">{row.interest}</td>
+                        <td className="px-4 py-2 text-text">{row.balance}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
           {result.insights && result.insights.length > 0 && (
             <div className="rounded-2xl bg-surface p-4 shadow-card">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Insights</p>
@@ -203,3 +273,4 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
 };
 
 export default CalculatorCard;
+

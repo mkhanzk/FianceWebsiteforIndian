@@ -88,6 +88,29 @@ body {
   @apply w-full rounded-xl border border-white/10 bg-base px-4 py-2 text-sm text-text shadow-sm ring-1 ring-transparent transition focus:outline-none focus:ring-2 focus:ring-accent/30 dark:bg-slate-900;
 }
 
+.range {
+  @apply h-1.5 w-full cursor-pointer appearance-none rounded-full;
+  background: rgba(15, 157, 88, 0.2);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: rgb(var(--accent));
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+}
+
+.range::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 9999px;
+  background: rgb(var(--accent));
+  border: 0;
+}
+
 .label {
   @apply text-xs font-semibold uppercase tracking-[0.2em] text-muted;
 }

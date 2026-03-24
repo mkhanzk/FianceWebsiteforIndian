@@ -20,6 +20,7 @@ export type CalculatorResult = {
     type: 'doughnut' | 'line' | 'bar';
     data: unknown;
   };
+  schedule?: { label: string; principal: string; interest: string; balance: string }[];
   insights?: string[];
   disclaimer?: string;
 };
@@ -70,12 +71,35 @@ export const calculatorCategories = [
 
 const buildLoanResult = (principal: number, rate: number, years: number): CalculatorResult => {
   const monthlyRate = rate / 12 / 100;
-  const months = years * 12;
+  const months = Math.max(1, Math.round(years * 12));
   const emi = monthlyRate === 0
     ? principal / months
     : principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
   const totalPayment = emi * months;
   const totalInterest = totalPayment - principal;
+
+  let balance = principal;
+  const schedule: { label: string; principal: string; interest: string; balance: string }[] = [];
+  const yearsCount = Math.ceil(months / 12);
+
+  for (let yearIndex = 0; yearIndex < yearsCount; yearIndex += 1) {
+    let principalPaid = 0;
+    let interestPaid = 0;
+    const monthsInYear = Math.min(12, months - yearIndex * 12);
+    for (let month = 0; month < monthsInYear; month += 1) {
+      const interest = balance * monthlyRate;
+      const principalComponent = emi - interest;
+      balance = Math.max(0, balance - principalComponent);
+      principalPaid += principalComponent;
+      interestPaid += interest;
+    }
+    schedule.push({
+      label: `Year ${yearIndex + 1}`,
+      principal: formatINR(principalPaid),
+      interest: formatINR(interestPaid),
+      balance: formatINR(balance)
+    });
+  }
 
   return {
     summary: [
@@ -101,6 +125,7 @@ const buildLoanResult = (principal: number, rate: number, years: number): Calcul
         ]
       }
     },
+    schedule,
     insights: ['Higher tenure lowers EMI but increases total interest.']
   };
 };
