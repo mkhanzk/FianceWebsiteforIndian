@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { NextSeo, FAQPageJsonLd } from 'next-seo';
+import { useState } from 'react';
 import Link from 'next/link';
 import CalculatorCard from '../../components/CalculatorCard';
 import SectionHeading from '../../components/SectionHeading';
@@ -12,6 +13,7 @@ type Props = {
 
 export default function CalculatorDetail({ slug }: Props) {
   const calculator = getCalculatorBySlug(slug);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   if (!calculator) return null;
 
@@ -54,7 +56,13 @@ export default function CalculatorDetail({ slug }: Props) {
       <section className="section-pad">
         <div className="container-max py-10">
           <SectionHeading title={calculator.title} subtitle={calculator.description} />
-          <div className="grid gap-6 lg:grid-cols-[240px_1.1fr_0.9fr]">
+          <div className="mt-4 flex flex-wrap items-center gap-2 lg:hidden">
+            <button type="button" className="btn-secondary" onClick={() => setIsPanelOpen(true)}>
+              Browse Categories
+            </button>
+            <Link href="/calculators" className="btn-secondary">All Calculators</Link>
+          </div>
+          <div className="mt-6 grid gap-6 lg:grid-cols-[240px_1.1fr_0.9fr]">
             <aside className="hidden lg:block">
               <div className="sticky top-24 space-y-4">
                 <div className="card">
@@ -129,6 +137,62 @@ export default function CalculatorDetail({ slug }: Props) {
           </div>
         </div>
       </section>
+
+      {isPanelOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            type="button"
+            aria-label="Close categories"
+            onClick={() => setIsPanelOpen(false)}
+            className="absolute inset-0 bg-black/40"
+          />
+          <div className="absolute left-0 top-0 flex h-full w-72 flex-col bg-surface p-5 shadow-card">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-text">Categories</p>
+              <button type="button" className="text-xs text-muted" onClick={() => setIsPanelOpen(false)}>
+                Close
+              </button>
+            </div>
+            <nav className="mt-4 space-y-2 text-sm">
+              {categories.map((category) => {
+                const isActive = category.id === calculator.category;
+                return (
+                  <div key={category.id}>
+                    <Link
+                      href={`/calculators#${category.id}`}
+                      onClick={() => setIsPanelOpen(false)}
+                      className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
+                        isActive ? 'bg-base/60 text-text' : 'text-muted hover:bg-base/60 hover:text-text'
+                      }`}
+                    >
+                      <span>{category.label}</span>
+                      <span className="badge">{category.count}</span>
+                    </Link>
+                    {isActive && (
+                      <div className="mt-2 space-y-1 pl-3">
+                        {activeCategoryItems.map((item) => (
+                          <Link
+                            key={item.slug}
+                            href={`/calculators/${item.slug}`}
+                            onClick={() => setIsPanelOpen(false)}
+                            className={`flex items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition ${
+                              item.slug === calculator.slug
+                                ? 'bg-accent/20 text-text'
+                                : 'text-muted hover:bg-base/60 hover:text-text'
+                            }`}
+                          >
+                            <span>{item.title}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
+      )}
 
       <section className="section-pad">
         <div className="container-max py-10">

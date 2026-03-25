@@ -1,7 +1,34 @@
 import { NextSeo } from 'next-seo';
 import SectionHeading from '../../components/SectionHeading';
-import LeadForm from '../../components/LeadForm';
 import AdSlot from '../../components/AdSlot';
+import { withAffiliate } from '../../lib/affiliate';
+
+const insurancePartners = [
+  {
+    name: 'Policybazaar',
+    description: 'Compare term and health plans in minutes.',
+    href: 'https://www.policybazaar.com',
+    trackingParam: 'ref'
+  },
+  {
+    name: 'HDFC Life',
+    description: 'Term insurance and protection plans.',
+    href: 'https://www.hdfclife.com',
+    trackingParam: 'ref'
+  },
+  {
+    name: 'ICICI Lombard',
+    description: 'Health and motor insurance coverage.',
+    href: 'https://www.icicilombard.com',
+    trackingParam: 'ref'
+  },
+  {
+    name: 'Max Life',
+    description: 'Long-term family protection plans.',
+    href: 'https://www.maxlifeinsurance.com',
+    trackingParam: 'ref'
+  }
+];
 
 export default function InsurancePartnersPage() {
   return (
@@ -11,29 +38,29 @@ export default function InsurancePartnersPage() {
       <section className="section-pad">
         <div className="container-max py-10">
           <SectionHeading title="Insurance Partners" subtitle="Protect your family with the right cover" />
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="space-y-4">
-              <div className="card">
-                <h3 className="text-lg font-semibold text-text">Coverage highlights</h3>
-                <p className="mt-2 text-sm text-muted">
-                  Compare premiums, coverage, and add-ons across top insurers tailored to your life stage.
-                </p>
-                <div className="mt-6 grid gap-3 md:grid-cols-2">
-                  {['Term Insurance', 'Health Insurance', 'Family Floater', 'Critical Illness'].map((item) => (
-                    <div key={item} className="rounded-2xl bg-base p-4">
-                      <p className="text-xs text-muted">{item}</p>
-                      <p className="text-lg font-semibold text-text">Coverage up to INR 1 Cr</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <AdSlot label="Insurance Partner Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
-            </div>
-            <LeadForm />
+          <p className="max-w-2xl text-sm text-muted">
+            Review trusted insurers and compare plans. Links include your affiliate tag when configured.
+          </p>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {insurancePartners.map((partner) => (
+              <a
+                key={partner.name}
+                href={withAffiliate(partner.href, partner.trackingParam)}
+                target="_blank"
+                rel="noreferrer sponsored"
+                className="card"
+              >
+                <h3 className="text-lg font-semibold text-text">{partner.name}</h3>
+                <p className="mt-2 text-sm text-muted">{partner.description}</p>
+                <span className="mt-4 inline-flex text-xs font-semibold text-accent">Visit partner</span>
+              </a>
+            ))}
+          </div>
+          <div className="mt-8">
+            <AdSlot label="Insurance Partner Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
           </div>
         </div>
       </section>
     </>
   );
 }
-
