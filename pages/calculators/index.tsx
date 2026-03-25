@@ -1,5 +1,5 @@
 import { NextSeo, FAQPageJsonLd } from 'next-seo';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import AdSlot from '../../components/AdSlot';
 import CalculatorAccordion from '../../components/CalculatorAccordion';
@@ -36,36 +36,6 @@ export default function CalculatorsPage() {
     return counts;
   }, [filteredCalculators]);
 
-  useEffect(() => {
-    if (query.trim()) {
-      setSelectedCalculator(null);
-      return;
-    }
-
-    const categoriesWithItems = calculatorCategories.filter((category) =>
-      filteredCalculators.some((calc) => calc.category === category.id)
-    );
-    const defaultCategory = categoriesWithItems.find((category) => category.id === selectedCategory) ?? categoriesWithItems[0];
-
-    if (!defaultCategory) return;
-
-    if (defaultCategory.id !== selectedCategory) {
-      setSelectedCategory(defaultCategory.id);
-      setSelectedCalculator(null);
-      return;
-    }
-
-    const activeItems = filteredCalculators.filter((calc) => calc.category === defaultCategory.id);
-    if (activeItems.length === 0) {
-      setSelectedCalculator(null);
-      return;
-    }
-
-    if (!selectedCalculator || !activeItems.some((calc) => calc.slug === selectedCalculator)) {
-      setSelectedCalculator(activeItems[0].slug);
-    }
-  }, [query, selectedCategory, filteredCalculators, selectedCalculator]);
-
   const activeCategory = calculatorCategories.find((category) => category.id === selectedCategory);
   const calculatorsInActive = useMemo(() => {
     if (!activeCategory) return [];
@@ -79,14 +49,13 @@ export default function CalculatorsPage() {
   const displayCalculators = useMemo(() => {
     if (query.trim()) return filteredCalculators;
     if (selectedCalc) return [selectedCalc];
-    return calculatorsInActive.slice(0, 1);
+    return calculatorsInActive;
   }, [query, filteredCalculators, selectedCalc, calculatorsInActive]);
 
   const handleCategoryClick = (id: string) => {
     setQuery('');
     setSelectedCategory(id);
-    const first = calculators.find((calc) => calc.category === id);
-    setSelectedCalculator(first?.slug ?? null);
+    setSelectedCalculator(null);
     scrollToTop();
   };
 
@@ -110,10 +79,10 @@ export default function CalculatorsPage() {
 
   const renderCategoryNav = (onClose?: () => void) => (
     <nav className="mt-3 space-y-2 text-sm">
-      {calculatorCategories.map((category) => {
-        const isActive = category.id === selectedCategory;
-        const categoryItems = calculators.filter((calc) => calc.category === category.id);
-        return (
+              {calculatorCategories.map((category) => {
+                const isActive = category.id === selectedCategory;
+                const categoryItems = calculators.filter((calc) => calc.category === category.id);
+                return (
           <div key={category.id}>
             <button
               type="button"
@@ -147,6 +116,16 @@ export default function CalculatorsPage() {
                     <span>{calc.title}</span>
                   </button>
                 ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCalculator(null);
+                    onClose?.();
+                  }}
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs text-muted transition hover:bg-base/60 hover:text-text"
+                >
+                  <span>Show all {category.label}</span>
+                </button>
               </div>
             )}
           </div>
@@ -238,10 +217,15 @@ export default function CalculatorsPage() {
                   <h2 className="mt-2 text-2xl font-semibold text-text">{headerSubtitle}</h2>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="badge">{displayCalculators.length} tool</span>
+                  <span className="badge">{displayCalculators.length} tools</span>
                   {query.trim() && (
                     <button type="button" className="btn-secondary" onClick={() => setQuery('')}>
                       Clear Search
+                    </button>
+                  )}
+                  {!query.trim() && selectedCalc && (
+                    <button type="button" className="btn-secondary" onClick={() => setSelectedCalculator(null)}>
+                      Show all {activeCategory?.label}
                     </button>
                   )}
                 </div>
