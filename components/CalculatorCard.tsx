@@ -1,4 +1,4 @@
-import { Share2, Camera, Table } from 'lucide-react';
+import { Share2, Camera, Table, ChevronDown } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { CalculatorConfig } from '../data/calculators';
@@ -195,12 +195,13 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
           </div>
 
           {result.schedule && result.schedule.length > 0 && (
-            <details className="rounded-2xl border border-white/10 bg-surface p-4 shadow-card">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Amortization Schedule</p>
-                <span className="text-xs text-muted">Tap to expand</span>
+            <details className="details-card">
+              <summary className="details-summary">
+                <span>Amortization Schedule</span>
+                <span className="details-meta">View</span>
+                <ChevronDown className="details-chevron" size={16} />
               </summary>
-              <div className="mt-4 space-y-3">
+              <div className="details-body space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Month-wise Breakdown</p>
                   <button type="button" className="btn-secondary" onClick={handleDownloadExcel}>
