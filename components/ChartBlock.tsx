@@ -7,10 +7,8 @@ const Pie = dynamic(() => import('react-chartjs-2').then((mod) => mod.Pie), { ss
 const Line = dynamic(() => import('react-chartjs-2').then((mod) => mod.Line), { ssr: false });
 const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), { ssr: false });
 
-const paletteLight = ['#0F9D58', '#0B3C5D', '#16a34a', '#0284c7', '#f59e0b'];
-const paletteDark = ['#22c55e', '#38bdf8', '#0ea5e9', '#f59e0b', '#a855f7'];
-const fillLight = ['rgba(15, 157, 88, 0.12)', 'rgba(11, 60, 93, 0.12)', 'rgba(2, 132, 199, 0.12)'];
-const fillDark = ['rgba(34, 197, 94, 0.16)', 'rgba(56, 189, 248, 0.16)', 'rgba(14, 165, 233, 0.16)'];
+const palette = ['#22c55e', '#38bdf8', '#f59e0b', '#f97316', '#a78bfa'];
+const fillPalette = ['rgba(34, 197, 94, 0.12)', 'rgba(56, 189, 248, 0.12)', 'rgba(245, 158, 11, 0.12)'];
 
 const ChartBlock = ({
   chart,
@@ -35,11 +33,8 @@ const ChartBlock = ({
   }, []);
 
   const options = useMemo(() => {
-    const color = isDark ? '#cbd5f5' : '#0b3c5d';
-    const gridColor = isDark ? 'rgba(148, 163, 184, 0.18)' : 'rgba(11, 60, 93, 0.08)';
-    const tooltipBg = isDark ? '#0b1220' : '#ffffff';
-    const tooltipBorder = isDark ? 'rgba(148, 163, 184, 0.25)' : 'rgba(15, 23, 42, 0.12)';
-    const tooltipText = isDark ? '#e2e8f0' : '#0b3c5d';
+    const color = '#cbd5f5';
+    const gridColor = 'rgba(148, 163, 184, 0.18)';
     const base: any = {
       responsive: true,
       maintainAspectRatio: false,
@@ -52,11 +47,11 @@ const ChartBlock = ({
           }
         },
         tooltip: {
-          backgroundColor: tooltipBg,
-          borderColor: tooltipBorder,
+          backgroundColor: '#0b1220',
+          borderColor: 'rgba(148, 163, 184, 0.25)',
           borderWidth: 1,
-          titleColor: tooltipText,
-          bodyColor: tooltipText,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
           padding: 12,
           displayColors: true
         }
@@ -99,14 +94,11 @@ const ChartBlock = ({
     }
 
     return base;
-  }, [chart.type, isDark]);
+  }, [chart.type]);
 
   const styledData = useMemo(() => {
     const data: any = chart.data;
     if (!data || !Array.isArray(data.datasets)) return data;
-    const palette = isDark ? paletteDark : paletteLight;
-    const fills = isDark ? fillDark : fillLight;
-    const pointBorder = isDark ? '#0b1220' : '#f8fafc';
     const datasets = data.datasets.map((dataset: any, index: number) => {
       const color = palette[index % palette.length];
       if (chart.type === 'line') {
@@ -114,28 +106,24 @@ const ChartBlock = ({
         return {
           ...dataset,
           borderColor,
-          backgroundColor: dataset.backgroundColor ?? fills[index % fills.length],
+          backgroundColor: dataset.backgroundColor ?? fillPalette[index % fillPalette.length],
           borderWidth: 3,
           pointRadius: 4,
           pointHoverRadius: 6,
           pointBackgroundColor: borderColor,
-          pointBorderColor: pointBorder,
+          pointBorderColor: '#0b1220',
           pointBorderWidth: 2,
           tension: dataset.tension ?? 0.35,
           fill: false
         };
       }
       if (chart.type === 'bar') {
-        const values = Array.isArray(dataset.data) ? dataset.data : [];
-        const backgroundColor = values.length > 1
-          ? values.map((_: any, idx: number) => palette[idx % palette.length])
-          : palette[index % palette.length];
         return {
           ...dataset,
-          backgroundColor,
-          borderColor: isDark ? '#0b1220' : '#0b3c5d',
+          backgroundColor: dataset.backgroundColor ?? color,
+          borderColor: '#0b3c5d',
           borderWidth: 1,
-          borderRadius: 10,
+          borderRadius: 8,
           borderSkipped: false
         };
       }

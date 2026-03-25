@@ -126,10 +126,6 @@ body {
 
 .chart-surface {
   @apply rounded-2xl border border-white/10 p-4 shadow-card;
-  background: linear-gradient(135deg, rgba(236, 244, 252, 0.95), rgba(248, 250, 252, 0.98));
-}
-
-.dark .chart-surface {
   background: linear-gradient(135deg, rgba(11, 18, 32, 0.95), rgba(15, 23, 42, 0.9));
 }
 
