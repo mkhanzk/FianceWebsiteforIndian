@@ -1,4 +1,4 @@
-﻿import { formatINR, formatNumber, formatPercent } from '../lib/format';
+import { formatINR, formatNumber, formatPercent } from '../lib/format';
 
 export type CalculatorInput = {
   id: string;
@@ -693,8 +693,8 @@ const baseFaqs = [
     answer: 'It uses standard financial formulas to estimate results based on your inputs.'
   },
   {
-    question: 'Can I download a PDF?',
-    answer: 'Yes, use the Download PDF button to export a branded report.'
+    question: 'Can I download the Excel schedule?',
+    answer: 'Yes. Loan calculators include a Download Excel button for the month-wise schedule.'
   }
 ];
 
@@ -835,7 +835,7 @@ export const calculators: CalculatorConfig[] = [
     ],
     seo: {
       title: 'SIP Calculator - RupeePlanner',
-      description: 'Calculate SIP returns with growth chart and PDF report.'
+      description: 'Calculate SIP returns with growth chart and detailed schedule.'
     },
     compute: (values) => buildSipResult(values.monthly, values.rate, values.years)
   },

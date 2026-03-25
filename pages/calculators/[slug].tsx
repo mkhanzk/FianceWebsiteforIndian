@@ -4,7 +4,7 @@ import Link from 'next/link';
 import CalculatorCard from '../../components/CalculatorCard';
 import SectionHeading from '../../components/SectionHeading';
 import FAQ from '../../components/FAQ';
-import { calculatorSlugs, getCalculatorBySlug, calculators } from '../../data/calculators';
+import { calculatorSlugs, getCalculatorBySlug, calculators, calculatorCategories } from '../../data/calculators';
 
 type Props = {
   slug: string;
@@ -17,10 +17,14 @@ export default function CalculatorDetail({ slug }: Props) {
 
   const related = calculators.filter((calc) => calc.category === calculator.category && calc.slug !== calculator.slug).slice(0, 3);
   const isLoan = calculator.category === 'loan';
+  const categories = calculatorCategories.map((category) => ({
+    ...category,
+    count: calculators.filter((calc) => calc.category === category.id).length
+  }));
 
   const formula = isLoan
-    ? 'EMI = P × r × (1 + r)^n / ((1 + r)^n − 1)'
-    : 'Future Value = P × (1 + r)^n';
+    ? 'EMI = P x r x (1 + r)^n / ((1 + r)^n - 1)'
+    : 'Future Value = P x (1 + r)^n';
   const formulaHint = isLoan
     ? 'P = principal, r = monthly rate, n = number of months.'
     : 'P = principal, r = annual rate, n = years.';
@@ -28,12 +32,12 @@ export default function CalculatorDetail({ slug }: Props) {
     ? [
         'Enter loan amount, interest rate, and tenure.',
         'Review EMI, total interest, and total payment.',
-        'Use the amortization schedule to see yearly principal vs interest.'
+        'Use the amortization schedule to see monthly principal vs interest.'
       ]
     : [
         'Enter investment amount, rate of return, and duration.',
         'Review summary metrics and growth chart.',
-        'Download PDF to share with your advisor.'
+        'Download the Excel schedule to share or compare scenarios.'
       ];
 
   return (
@@ -49,15 +53,48 @@ export default function CalculatorDetail({ slug }: Props) {
       <section className="section-pad">
         <div className="container-max py-10">
           <SectionHeading title={calculator.title} subtitle={calculator.description} />
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="grid gap-6 lg:grid-cols-[220px_1.1fr_0.9fr]">
+            <aside className="hidden lg:block">
+              <div className="sticky top-24 space-y-4">
+                <div className="card">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Categories</p>
+                  <nav className="mt-3 space-y-2 text-sm">
+                    {categories.map((category) => {
+                      const isActive = category.id === calculator.category;
+                      return (
+                        <Link
+                          key={category.id}
+                          href={`/calculators#${category.id}`}
+                          className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
+                            isActive ? 'bg-base/60 text-text' : 'text-muted hover:bg-base/60 hover:text-text'
+                          }`}
+                        >
+                          <span>{category.label}</span>
+                          <span className="badge">{category.count}</span>
+                        </Link>
+                      );
+                    })}
+                  </nav>
+                </div>
+                <div className="card">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Quick Links</p>
+                  <div className="mt-3 flex flex-col gap-2 text-sm text-muted">
+                    <Link href="/calculators" className="hover:text-text">All Calculators</Link>
+                    <Link href="/tools" className="hover:text-text">Planning Tools</Link>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
             <CalculatorCard calculator={calculator} />
+
             <div className="space-y-4">
               <div className="rounded-2xl bg-surface p-6 shadow-card">
                 <p className="text-sm font-semibold text-text">Why RupeePlanner</p>
                 <ul className="mt-3 space-y-2 text-sm text-muted">
                   <li>Instant calculations with real-time charts.</li>
                   <li>Amortization schedules for full clarity.</li>
-                  <li>PDF + CSV exports for sharing.</li>
+                  <li>Excel exports for sharing.</li>
                 </ul>
               </div>
               <div className="card">
@@ -134,4 +171,3 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     props: { slug }
   };
 };
-

@@ -1,4 +1,4 @@
-﻿export const calculatorFaqs = [
+export const calculatorFaqs = [
   {
     question: 'What is EMI?',
     answer: 'EMI stands for Equated Monthly Installment. It is the fixed monthly payment for a loan.'
@@ -13,6 +13,6 @@
   },
   {
     question: 'Can I download the report?',
-    answer: 'Yes, each calculator includes a PDF report with inputs, summary, and chart.'
+    answer: 'Loan calculators include an Excel amortization schedule download along with charts and summaries.'
   }
 ];

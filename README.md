@@ -1,10 +1,10 @@
-﻿# RupeePlanner.in
+# RupeePlanner.in
 
 A modern multi-page financial planning website for Indian users with calculators, SEO, monetization, and lead capture.
 
 ## Features
 - Loan, investment, tax, savings, retirement, and other calculators
-- Chart.js visualizations and PDF exports (jsPDF)
+- Chart.js visualizations and Excel exports
 - Lead capture API with rate limiting and webhook forwarding
 - Blog with SEO schema markup
 - Dark/light mode and PWA support
