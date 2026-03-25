@@ -10,6 +10,9 @@ import { calculatorFaqs } from '../../data/faqs';
 
 export default function CalculatorsPage() {
   const [query, setQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(calculatorCategories[0]?.id ?? '');
+  const [selectedCalculator, setSelectedCalculator] = useState<string | null>(null);
+
   const filteredCalculators = useMemo(() => {
     if (!query.trim()) return calculators;
     const search = query.toLowerCase();
@@ -18,12 +21,6 @@ export default function CalculatorsPage() {
     );
   }, [query]);
 
-  const categoriesWithItems = useMemo(() => {
-    return calculatorCategories.filter((category) =>
-      filteredCalculators.some((calc) => calc.category === category.id)
-    );
-  }, [filteredCalculators]);
-
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     calculatorCategories.forEach((category) => {
@@ -31,6 +28,43 @@ export default function CalculatorsPage() {
     });
     return counts;
   }, [filteredCalculators]);
+
+  const activeCategory = calculatorCategories.find((category) => category.id === selectedCategory) ?? calculatorCategories[0];
+  const calculatorsInActive = useMemo(() => {
+    if (!activeCategory) return [];
+    return filteredCalculators.filter((calc) => calc.category === activeCategory.id);
+  }, [filteredCalculators, activeCategory]);
+
+  const selectedCalc = selectedCalculator
+    ? filteredCalculators.find((calc) => calc.slug === selectedCalculator)
+    : null;
+
+  const displayCalculators = useMemo(() => {
+    if (query.trim()) return filteredCalculators;
+    if (selectedCalc) return [selectedCalc];
+    return calculatorsInActive;
+  }, [query, filteredCalculators, selectedCalc, calculatorsInActive]);
+
+  const handleCategoryClick = (id: string) => {
+    setSelectedCategory(id);
+    setSelectedCalculator(null);
+  };
+
+  const handleCalculatorClick = (slug: string, categoryId: string) => {
+    setSelectedCategory(categoryId);
+    setSelectedCalculator(slug);
+  };
+
+  const headerTitle = query.trim()
+    ? 'Search Results'
+    : selectedCalc
+      ? selectedCalc.title
+      : activeCategory?.label ?? 'Calculators';
+  const headerSubtitle = query.trim()
+    ? `${filteredCalculators.length} calculators match "${query.trim()}"`
+    : selectedCalc
+      ? selectedCalc.description
+      : activeCategory?.description ?? 'Choose a category to begin.';
 
   return (
     <>
@@ -58,12 +92,28 @@ export default function CalculatorsPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
             />
+            <select
+              className="input max-w-xs lg:hidden"
+              value={selectedCategory}
+              onChange={(event) => handleCategoryClick(event.target.value)}
+            >
+              {calculatorCategories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mt-6 flex flex-wrap gap-3 lg:hidden">
             {calculatorCategories.map((category) => (
-              <Link key={category.id} href={`#${category.id}`} className="badge">
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => handleCategoryClick(category.id)}
+                className={`badge ${selectedCategory === category.id ? 'bg-accent text-white' : ''}`}
+              >
                 {category.label}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -77,16 +127,49 @@ export default function CalculatorsPage() {
                 <div className="card">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Categories</p>
                   <nav className="mt-3 space-y-2 text-sm">
-                    {calculatorCategories.map((category) => (
-                      <a
-                        key={category.id}
-                        href={`#${category.id}`}
-                        className="flex items-center justify-between rounded-xl px-3 py-2 text-muted transition hover:bg-base/60 hover:text-text"
-                      >
-                        <span>{category.label}</span>
-                        <span className="badge">{categoryCounts[category.id] ?? 0}</span>
-                      </a>
-                    ))}
+                    {calculatorCategories.map((category) => {
+                      const isActive = category.id === selectedCategory;
+                      const categoryItems = calculators.filter((calc) => calc.category === category.id);
+                      return (
+                        <div key={category.id}>
+                          <button
+                            type="button"
+                            onClick={() => handleCategoryClick(category.id)}
+                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition ${
+                              isActive ? 'bg-base/60 text-text' : 'text-muted hover:bg-base/60 hover:text-text'
+                            }`}
+                          >
+                            <span>{category.label}</span>
+                            <span className="badge">{categoryCounts[category.id] ?? 0}</span>
+                          </button>
+                          {isActive && (
+                            <div className="mt-2 space-y-1 pl-3">
+                              {categoryItems.map((calc) => (
+                                <button
+                                  key={calc.slug}
+                                  type="button"
+                                  onClick={() => handleCalculatorClick(calc.slug, category.id)}
+                                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition ${
+                                    selectedCalculator === calc.slug
+                                      ? 'bg-accent/20 text-text'
+                                      : 'text-muted hover:bg-base/60 hover:text-text'
+                                  }`}
+                                >
+                                  <span>{calc.title}</span>
+                                </button>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() => setSelectedCalculator(null)}
+                                className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs text-muted transition hover:bg-base/60 hover:text-text"
+                              >
+                                <span>Show all {category.label}</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </nav>
                 </div>
                 <div className="card">
@@ -99,31 +182,41 @@ export default function CalculatorsPage() {
               </div>
             </aside>
 
-            <div className="space-y-10">
-              {categoriesWithItems.map((category, index) => {
-                const items = filteredCalculators.filter((calc) => calc.category === category.id);
-                return (
-                  <div key={category.id} id={category.id} className="scroll-mt-24">
-                    <div className="mb-6 flex items-center justify-between">
-                      <div>
-                        <p className="label">{category.label}</p>
-                        <h2 className="mt-2 text-2xl font-semibold text-text">{category.description}</h2>
-                      </div>
-                      <span className="badge">{items.length} tools</span>
-                    </div>
-                    <div className="space-y-4">
-                      {items.map((calc) => (
-                        <CalculatorAccordion key={calc.slug} calculator={calc} />
-                      ))}
-                    </div>
-                    {index < categoriesWithItems.length - 1 && (
-                      <div className="mt-8">
-                        <AdSlot label="Between Calculator Sections" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div className="space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="label">{headerTitle}</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-text">{headerSubtitle}</h2>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="badge">{displayCalculators.length} tools</span>
+                  {query.trim() && (
+                    <button type="button" className="btn-secondary" onClick={() => setQuery('')}>
+                      Clear Search
+                    </button>
+                  )}
+                  {!query.trim() && selectedCalc && (
+                    <button type="button" className="btn-secondary" onClick={() => setSelectedCalculator(null)}>
+                      Show All in {activeCategory?.label}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {displayCalculators.length === 0 ? (
+                <div className="card">
+                  <p className="text-sm font-semibold text-text">No calculators found</p>
+                  <p className="mt-2 text-sm text-muted">Try adjusting your search or pick another category.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {displayCalculators.map((calc) => (
+                    <CalculatorAccordion key={calc.slug} calculator={calc} />
+                  ))}
+                </div>
+              )}
+
+              <AdSlot label="Calculator List Ad" adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_CONTENT} />
             </div>
           </div>
         </div>

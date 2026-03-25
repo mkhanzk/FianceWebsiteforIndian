@@ -21,6 +21,7 @@ export default function CalculatorDetail({ slug }: Props) {
     ...category,
     count: calculators.filter((calc) => calc.category === category.id).length
   }));
+  const activeCategoryItems = calculators.filter((calc) => calc.category === calculator.category);
 
   const formula = isLoan
     ? 'EMI = P x r x (1 + r)^n / ((1 + r)^n - 1)'
@@ -53,7 +54,7 @@ export default function CalculatorDetail({ slug }: Props) {
       <section className="section-pad">
         <div className="container-max py-10">
           <SectionHeading title={calculator.title} subtitle={calculator.description} />
-          <div className="grid gap-6 lg:grid-cols-[220px_1.1fr_0.9fr]">
+          <div className="grid gap-6 lg:grid-cols-[240px_1.1fr_0.9fr]">
             <aside className="hidden lg:block">
               <div className="sticky top-24 space-y-4">
                 <div className="card">
@@ -62,16 +63,34 @@ export default function CalculatorDetail({ slug }: Props) {
                     {categories.map((category) => {
                       const isActive = category.id === calculator.category;
                       return (
-                        <Link
-                          key={category.id}
-                          href={`/calculators#${category.id}`}
-                          className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
-                            isActive ? 'bg-base/60 text-text' : 'text-muted hover:bg-base/60 hover:text-text'
-                          }`}
-                        >
-                          <span>{category.label}</span>
-                          <span className="badge">{category.count}</span>
-                        </Link>
+                        <div key={category.id}>
+                          <Link
+                            href={`/calculators#${category.id}`}
+                            className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
+                              isActive ? 'bg-base/60 text-text' : 'text-muted hover:bg-base/60 hover:text-text'
+                            }`}
+                          >
+                            <span>{category.label}</span>
+                            <span className="badge">{category.count}</span>
+                          </Link>
+                          {isActive && (
+                            <div className="mt-2 space-y-1 pl-3">
+                              {activeCategoryItems.map((item) => (
+                                <Link
+                                  key={item.slug}
+                                  href={`/calculators/${item.slug}`}
+                                  className={`flex items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition ${
+                                    item.slug === calculator.slug
+                                      ? 'bg-accent/20 text-text'
+                                      : 'text-muted hover:bg-base/60 hover:text-text'
+                                  }`}
+                                >
+                                  <span>{item.title}</span>
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </nav>
