@@ -119,6 +119,11 @@ body {
   @apply inline-flex items-center rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent;
 }
 
+.chart-surface {
+  @apply rounded-2xl border border-white/10 p-4 shadow-card;
+  background: linear-gradient(135deg, rgba(11, 18, 32, 0.95), rgba(15, 23, 42, 0.9));
+}
+
 .fade-up {
   opacity: 0;
   animation: fadeUp 0.8s ease-out forwards;

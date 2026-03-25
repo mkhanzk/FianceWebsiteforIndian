@@ -171,7 +171,7 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
             ))}
           </div>
 
-          <div className="rounded-2xl bg-surface p-4 shadow-card">
+          <div className="chart-surface h-64">
             <ChartBlock chart={result.chart} chartRef={chartRef} />
           </div>
 
