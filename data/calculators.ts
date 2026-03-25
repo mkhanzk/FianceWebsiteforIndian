@@ -20,7 +20,7 @@ export type CalculatorResult = {
     type: 'doughnut' | 'line' | 'bar';
     data: unknown;
   };
-  schedule?: { label: string; principal: string; interest: string; balance: string }[];
+  schedule?: { label: string; emi: string; principal: string; interest: string; balance: string }[];
   insights?: string[];
   disclaimer?: string;
 };
@@ -79,26 +79,31 @@ const buildLoanResult = (principal: number, rate: number, years: number): Calcul
   const totalInterest = totalPayment - principal;
 
   let balance = principal;
-  const schedule: { label: string; principal: string; interest: string; balance: string }[] = [];
-  const yearsCount = Math.ceil(months / 12);
+  const schedule: { label: string; emi: string; principal: string; interest: string; balance: string }[] = [];
+  const principalSeries: number[] = [];
+  const interestSeries: number[] = [];
+  const labels: string[] = [];
+  let cumulativePrincipal = 0;
+  let cumulativeInterest = 0;
 
-  for (let yearIndex = 0; yearIndex < yearsCount; yearIndex += 1) {
-    let principalPaid = 0;
-    let interestPaid = 0;
-    const monthsInYear = Math.min(12, months - yearIndex * 12);
-    for (let month = 0; month < monthsInYear; month += 1) {
-      const interest = balance * monthlyRate;
-      const principalComponent = emi - interest;
-      balance = Math.max(0, balance - principalComponent);
-      principalPaid += principalComponent;
-      interestPaid += interest;
-    }
+  for (let monthIndex = 0; monthIndex < months; monthIndex += 1) {
+    const interest = balance * monthlyRate;
+    const principalComponent = emi - interest;
+    balance = Math.max(0, balance - principalComponent);
+    cumulativePrincipal += principalComponent;
+    cumulativeInterest += interest;
+
     schedule.push({
-      label: `Year ${yearIndex + 1}`,
-      principal: formatINR(principalPaid),
-      interest: formatINR(interestPaid),
+      label: `Month ${monthIndex + 1}`,
+      emi: formatINR(emi),
+      principal: formatINR(principalComponent),
+      interest: formatINR(interest),
       balance: formatINR(balance)
     });
+
+    labels.push(`M${monthIndex + 1}`);
+    principalSeries.push(Number(cumulativePrincipal.toFixed(0)));
+    interestSeries.push(Number(cumulativeInterest.toFixed(0)));
   }
 
   return {
@@ -114,13 +119,23 @@ const buildLoanResult = (principal: number, rate: number, years: number): Calcul
       { label: 'Total Months', value: `${months}` }
     ],
     chart: {
-      type: 'doughnut',
+      type: 'line',
       data: {
-        labels: ['Principal', 'Interest'],
+        labels,
         datasets: [
           {
-            data: [principal, totalInterest],
-            backgroundColor: ['#0F9D58', '#0B3C5D']
+            label: 'Principal Paid',
+            data: principalSeries,
+            borderColor: '#0F9D58',
+            backgroundColor: 'rgba(15, 157, 88, 0.2)',
+            tension: 0.35
+          },
+          {
+            label: 'Interest Paid',
+            data: interestSeries,
+            borderColor: '#0B3C5D',
+            backgroundColor: 'rgba(11, 60, 93, 0.2)',
+            tension: 0.35
           }
         ]
       }

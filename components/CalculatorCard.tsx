@@ -1,9 +1,8 @@
-import { Download, Share2, Camera, Table } from 'lucide-react';
+import { Share2, Camera, Table } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { CalculatorConfig } from '../data/calculators';
 import { formatINR, formatNumber, formatPercent } from '../lib/format';
-import { downloadCalculatorPdf } from '../lib/pdf';
 import ChartBlock from './ChartBlock';
 import Tooltip from './Tooltip';
 
@@ -42,41 +41,28 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
     setValues((prev) => ({ ...prev, [id]: Number.isFinite(parsed) ? parsed : 0 }));
   };
 
-  const handleDownloadPdf = () => {
-    const chartImage = chartRef.current?.toBase64Image?.();
-    const inputs = calculator.inputs.map((input) => ({
-      label: input.label,
-      value: formatInputValue(values[input.id], input.unit)
-    }));
-    downloadCalculatorPdf({
-      title: calculator.title,
-      inputs,
-      summary: result.summary.map((item) => ({ label: item.label, value: item.value })),
-      chartImage,
-      schedule: result.schedule
-        ? result.schedule.map((row) => ({
-            label: row.label,
-            value: `Principal ${row.principal} | Interest ${row.interest} | Balance ${row.balance}`
-          }))
-        : undefined
-    });
-  };
-
-  const handleDownloadCsv = () => {
+  const handleDownloadExcel = () => {
     if (!result.schedule) return;
-    const rows = [
-      ['Year', 'Principal Paid', 'Interest Paid', 'Balance'],
-      ...result.schedule.map((row) => [row.label, row.principal, row.interest, row.balance])
-    ];
-    const csv = rows.map((row) => row.join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const header = ['Month', 'EMI', 'Principal', 'Interest', 'Balance'];
+    const rows = result.schedule.map((row) => [row.label, row.emi, row.principal, row.interest, row.balance]);
+    const table = [
+      '<table>',
+      '<thead><tr>',
+      header.map((cell) => `<th>${cell}</th>`).join(''),
+      '</tr></thead>',
+      '<tbody>',
+      rows.map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join('')}</tr>`).join(''),
+      '</tbody></table>'
+    ].join('');
+
+    const blob = new Blob([table], { type: 'application/vnd.ms-excel;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${calculator.slug}-schedule.csv`;
+    link.download = `${calculator.slug}-schedule.xls`;
     link.click();
     URL.revokeObjectURL(url);
-    setStatus('Schedule downloaded.');
+    setStatus('Excel schedule downloaded.');
   };
 
   const handleShare = async () => {
@@ -212,18 +198,19 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
             <div className="rounded-2xl border border-white/10 bg-surface p-4 shadow-card">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Amortization Schedule</p>
-                <button type="button" className="btn-secondary" onClick={handleDownloadCsv}>
+                <button type="button" className="btn-secondary" onClick={handleDownloadExcel}>
                   <Table size={16} />
-                  Download CSV
+                  Download Excel
                 </button>
               </div>
               <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
                 <table className="w-full text-sm">
                   <thead className="bg-base text-muted">
                     <tr>
-                      <th className="px-4 py-2 text-left">Year</th>
-                      <th className="px-4 py-2 text-left">Principal Paid</th>
-                      <th className="px-4 py-2 text-left">Interest Paid</th>
+                      <th className="px-4 py-2 text-left">Month</th>
+                      <th className="px-4 py-2 text-left">EMI</th>
+                      <th className="px-4 py-2 text-left">Principal</th>
+                      <th className="px-4 py-2 text-left">Interest</th>
                       <th className="px-4 py-2 text-left">Balance</th>
                     </tr>
                   </thead>
@@ -231,6 +218,7 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
                     {result.schedule.map((row) => (
                       <tr key={row.label} className="border-t border-white/10">
                         <td className="px-4 py-2 text-muted">{row.label}</td>
+                        <td className="px-4 py-2 text-text">{row.emi}</td>
                         <td className="px-4 py-2 text-text">{row.principal}</td>
                         <td className="px-4 py-2 text-text">{row.interest}</td>
                         <td className="px-4 py-2 text-text">{row.balance}</td>
@@ -260,10 +248,6 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <button type="button" className="btn-primary" onClick={handleDownloadPdf}>
-          <Download size={16} />
-          Download PDF
-        </button>
         <button type="button" className="btn-secondary" onClick={handleShare}>
           <Share2 size={16} />
           Share Results

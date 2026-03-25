@@ -31,7 +31,7 @@ const ChartBlock = ({
 
   const options = useMemo(() => {
     const color = isDark ? '#e2e8f0' : '#0b3c5d';
-    return {
+    const base: any = {
       responsive: true,
       plugins: {
         legend: {
@@ -43,7 +43,31 @@ const ChartBlock = ({
         y: { ticks: { color } }
       }
     };
-  }, [isDark]);
+
+    if (chart.type === 'doughnut' || chart.type === 'pie') {
+      return {
+        ...base,
+        plugins: {
+          ...base.plugins,
+          tooltip: {
+            callbacks: {
+              label: (context: any) => {
+                const data = context.chart?.data?.datasets?.[context.datasetIndex]?.data ?? [];
+                const total = data.reduce((sum: number, entry: any) => sum + Number(entry || 0), 0);
+                const value = Number(data[context.dataIndex] || 0);
+                const percent = total ? (value / total) * 100 : 0;
+                const label = context.label ?? 'Value';
+                const percentText = percent % 1 === 0 ? percent.toFixed(0) : percent.toFixed(1);
+                return `${label}: ${percentText}%`;
+              }
+            }
+          }
+        }
+      };
+    }
+
+    return base;
+  }, [isDark, chart.type]);
 
   const refProps = chartRef ? { ref: chartRef } : {};
 
@@ -60,4 +84,3 @@ const ChartBlock = ({
 };
 
 export default ChartBlock;
-
