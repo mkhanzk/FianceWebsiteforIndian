@@ -195,39 +195,45 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
           </div>
 
           {result.schedule && result.schedule.length > 0 && (
-            <div className="rounded-2xl border border-white/10 bg-surface p-4 shadow-card">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+            <details className="rounded-2xl border border-white/10 bg-surface p-4 shadow-card">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Amortization Schedule</p>
-                <button type="button" className="btn-secondary" onClick={handleDownloadExcel}>
-                  <Table size={16} />
-                  Download Excel
-                </button>
-              </div>
-              <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
-                <table className="w-full text-sm">
-                  <thead className="bg-base text-muted">
-                    <tr>
-                      <th className="px-4 py-2 text-left">Month</th>
-                      <th className="px-4 py-2 text-left">EMI</th>
-                      <th className="px-4 py-2 text-left">Principal</th>
-                      <th className="px-4 py-2 text-left">Interest</th>
-                      <th className="px-4 py-2 text-left">Balance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.schedule.map((row) => (
-                      <tr key={row.label} className="border-t border-white/10">
-                        <td className="px-4 py-2 text-muted">{row.label}</td>
-                        <td className="px-4 py-2 text-text">{row.emi}</td>
-                        <td className="px-4 py-2 text-text">{row.principal}</td>
-                        <td className="px-4 py-2 text-text">{row.interest}</td>
-                        <td className="px-4 py-2 text-text">{row.balance}</td>
+                <span className="text-xs text-muted">Tap to expand</span>
+              </summary>
+              <div className="mt-4 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Month-wise Breakdown</p>
+                  <button type="button" className="btn-secondary" onClick={handleDownloadExcel}>
+                    <Table size={16} />
+                    Download Excel
+                  </button>
+                </div>
+                <div className="overflow-hidden rounded-2xl border border-white/10">
+                  <table className="w-full text-sm">
+                    <thead className="bg-base text-muted">
+                      <tr>
+                        <th className="px-4 py-2 text-left">Month</th>
+                        <th className="px-4 py-2 text-left">EMI</th>
+                        <th className="px-4 py-2 text-left">Principal</th>
+                        <th className="px-4 py-2 text-left">Interest</th>
+                        <th className="px-4 py-2 text-left">Balance</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {result.schedule.map((row) => (
+                        <tr key={row.label} className="border-t border-white/10">
+                          <td className="px-4 py-2 text-muted">{row.label}</td>
+                          <td className="px-4 py-2 text-text">{row.emi}</td>
+                          <td className="px-4 py-2 text-text">{row.principal}</td>
+                          <td className="px-4 py-2 text-text">{row.interest}</td>
+                          <td className="px-4 py-2 text-text">{row.balance}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            </details>
           )}
 
           {result.insights && result.insights.length > 0 && (

@@ -7,8 +7,8 @@ const Pie = dynamic(() => import('react-chartjs-2').then((mod) => mod.Pie), { ss
 const Line = dynamic(() => import('react-chartjs-2').then((mod) => mod.Line), { ssr: false });
 const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), { ssr: false });
 
-const palette = ['#22c55e', '#38bdf8', '#f59e0b', '#f97316', '#a78bfa'];
-const fillPalette = ['rgba(34, 197, 94, 0.12)', 'rgba(56, 189, 248, 0.12)', 'rgba(245, 158, 11, 0.12)'];
+const palette = ['#22c55e', '#0ea5e9', '#14b8a6', '#f59e0b', '#a855f7'];
+const fillPalette = ['rgba(34, 197, 94, 0.12)', 'rgba(14, 165, 233, 0.12)', 'rgba(20, 184, 166, 0.12)'];
 
 const ChartBlock = ({
   chart,
@@ -118,10 +118,16 @@ const ChartBlock = ({
         };
       }
       if (chart.type === 'bar') {
+        const values = Array.isArray(dataset.data) ? dataset.data : [];
+        const backgroundColor = values.length > 1
+          ? values.map((_: any, idx: number) => palette[idx % palette.length])
+          : palette[index % palette.length];
         return {
           ...dataset,
-          backgroundColor: dataset.backgroundColor ?? color,
-          borderRadius: 8,
+          backgroundColor,
+          borderColor: '#0b3c5d',
+          borderWidth: 1,
+          borderRadius: 10,
           borderSkipped: false
         };
       }
