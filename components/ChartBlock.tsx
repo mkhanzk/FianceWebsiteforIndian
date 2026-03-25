@@ -7,8 +7,10 @@ const Pie = dynamic(() => import('react-chartjs-2').then((mod) => mod.Pie), { ss
 const Line = dynamic(() => import('react-chartjs-2').then((mod) => mod.Line), { ssr: false });
 const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), { ssr: false });
 
-const palette = ['#22c55e', '#0ea5e9', '#14b8a6', '#f59e0b', '#a855f7'];
-const fillPalette = ['rgba(34, 197, 94, 0.12)', 'rgba(14, 165, 233, 0.12)', 'rgba(20, 184, 166, 0.12)'];
+const paletteLight = ['#0F9D58', '#0B3C5D', '#16a34a', '#0284c7', '#f59e0b'];
+const paletteDark = ['#22c55e', '#38bdf8', '#0ea5e9', '#f59e0b', '#a855f7'];
+const fillLight = ['rgba(15, 157, 88, 0.12)', 'rgba(11, 60, 93, 0.12)', 'rgba(2, 132, 199, 0.12)'];
+const fillDark = ['rgba(34, 197, 94, 0.16)', 'rgba(56, 189, 248, 0.16)', 'rgba(14, 165, 233, 0.16)'];
 
 const ChartBlock = ({
   chart,
@@ -33,8 +35,11 @@ const ChartBlock = ({
   }, []);
 
   const options = useMemo(() => {
-    const color = '#cbd5f5';
-    const gridColor = 'rgba(148, 163, 184, 0.18)';
+    const color = isDark ? '#cbd5f5' : '#0b3c5d';
+    const gridColor = isDark ? 'rgba(148, 163, 184, 0.18)' : 'rgba(11, 60, 93, 0.08)';
+    const tooltipBg = isDark ? '#0b1220' : '#ffffff';
+    const tooltipBorder = isDark ? 'rgba(148, 163, 184, 0.25)' : 'rgba(15, 23, 42, 0.12)';
+    const tooltipText = isDark ? '#e2e8f0' : '#0b3c5d';
     const base: any = {
       responsive: true,
       maintainAspectRatio: false,
@@ -47,11 +52,11 @@ const ChartBlock = ({
           }
         },
         tooltip: {
-          backgroundColor: '#0b1220',
-          borderColor: 'rgba(148, 163, 184, 0.25)',
+          backgroundColor: tooltipBg,
+          borderColor: tooltipBorder,
           borderWidth: 1,
-          titleColor: '#e2e8f0',
-          bodyColor: '#e2e8f0',
+          titleColor: tooltipText,
+          bodyColor: tooltipText,
           padding: 12,
           displayColors: true
         }
@@ -94,11 +99,14 @@ const ChartBlock = ({
     }
 
     return base;
-  }, [chart.type]);
+  }, [chart.type, isDark]);
 
   const styledData = useMemo(() => {
     const data: any = chart.data;
     if (!data || !Array.isArray(data.datasets)) return data;
+    const palette = isDark ? paletteDark : paletteLight;
+    const fills = isDark ? fillDark : fillLight;
+    const pointBorder = isDark ? '#0b1220' : '#f8fafc';
     const datasets = data.datasets.map((dataset: any, index: number) => {
       const color = palette[index % palette.length];
       if (chart.type === 'line') {
@@ -106,12 +114,12 @@ const ChartBlock = ({
         return {
           ...dataset,
           borderColor,
-          backgroundColor: dataset.backgroundColor ?? fillPalette[index % fillPalette.length],
+          backgroundColor: dataset.backgroundColor ?? fills[index % fills.length],
           borderWidth: 3,
           pointRadius: 4,
           pointHoverRadius: 6,
           pointBackgroundColor: borderColor,
-          pointBorderColor: '#0b1220',
+          pointBorderColor: pointBorder,
           pointBorderWidth: 2,
           tension: dataset.tension ?? 0.35,
           fill: false
@@ -125,7 +133,7 @@ const ChartBlock = ({
         return {
           ...dataset,
           backgroundColor,
-          borderColor: '#0b3c5d',
+          borderColor: isDark ? '#0b1220' : '#0b3c5d',
           borderWidth: 1,
           borderRadius: 10,
           borderSkipped: false
