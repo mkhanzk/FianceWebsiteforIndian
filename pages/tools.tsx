@@ -1,5 +1,6 @@
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
+import { useState } from 'react';
 import AdSlot from '../components/AdSlot';
 import SectionHeading from '../components/SectionHeading';
 import { tools } from '../data/tools';
@@ -10,6 +11,27 @@ import { formatINR } from '../lib/format';
 export default function ToolsPage() {
   const budgetPlanner = getCalculatorBySlug('budget-planner');
   const goalPlanner = getCalculatorBySlug('sip-calculator');
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  const renderToolNav = (onClose?: () => void) => (
+    <nav className="mt-3 space-y-2 text-sm text-muted">
+      {[
+        { label: 'Budget Tracker', href: '#budget-tracker' },
+        { label: 'Expense Planner', href: '#expense-planner' },
+        { label: 'Goal Planner', href: '#goal-planner' },
+        { label: 'Tool Library', href: '#tool-library' }
+      ].map((item) => (
+        <a
+          key={item.href}
+          className="hover:text-text"
+          href={item.href}
+          onClick={() => onClose?.()}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  );
 
   return (
     <>
@@ -34,22 +56,42 @@ export default function ToolsPage() {
               </div>
             ))}
           </div>
+          <div className="mt-6 flex flex-wrap items-center gap-3 lg:hidden">
+            <button type="button" className="btn-secondary" onClick={() => setIsPanelOpen(true)}>
+              Browse Tools
+            </button>
+          </div>
         </div>
       </section>
+
+      {isPanelOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <button
+            type="button"
+            aria-label="Close tools menu"
+            onClick={() => setIsPanelOpen(false)}
+            className="absolute inset-0 bg-black/40"
+          />
+          <div className="absolute left-0 top-0 flex h-full w-72 flex-col bg-surface p-5 shadow-card">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold text-text">Tools Menu</p>
+              <button type="button" className="text-xs text-muted" onClick={() => setIsPanelOpen(false)}>
+                Close
+              </button>
+            </div>
+            {renderToolNav(() => setIsPanelOpen(false))}
+          </div>
+        </div>
+      )}
 
       <section className="section-pad">
         <div className="container-max py-10">
           <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
             <aside className="hidden lg:block">
-              <div className="sticky top-24 space-y-4">
+              <div className="sticky top-24 max-h-[calc(100vh-6rem)] space-y-4 overflow-y-auto pr-1">
                 <div className="card">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Tool Menu</p>
-                  <nav className="mt-3 space-y-2 text-sm text-muted">
-                    <a className="hover:text-text" href="#budget-tracker">Budget Tracker</a>
-                    <a className="hover:text-text" href="#expense-planner">Expense Planner</a>
-                    <a className="hover:text-text" href="#goal-planner">Goal Planner</a>
-                    <a className="hover:text-text" href="#tool-library">Tool Library</a>
-                  </nav>
+                  {renderToolNav()}
                 </div>
                 <div className="card">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Quick Links</p>

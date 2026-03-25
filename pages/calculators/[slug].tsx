@@ -64,7 +64,7 @@ export default function CalculatorDetail({ slug }: Props) {
           </div>
           <div className="mt-6 grid gap-6 lg:grid-cols-[240px_1.1fr_0.9fr]">
             <aside className="hidden lg:block">
-              <div className="sticky top-24 space-y-4">
+              <div className="sticky top-24 max-h-[calc(100vh-6rem)] space-y-4 overflow-y-auto pr-1">
                 <div className="card">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Categories</p>
                   <nav className="mt-3 space-y-2 text-sm">

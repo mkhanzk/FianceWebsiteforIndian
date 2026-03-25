@@ -15,6 +15,10 @@ export default function CalculatorsPage() {
   );
   const [selectedCalculator, setSelectedCalculator] = useState<string | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const scrollToTop = () => {
+    if (typeof window === 'undefined') return;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const filteredCalculators = useMemo(() => {
     if (!query.trim()) return calculators;
@@ -83,12 +87,14 @@ export default function CalculatorsPage() {
     setSelectedCategory(id);
     const first = calculators.find((calc) => calc.category === id);
     setSelectedCalculator(first?.slug ?? null);
+    scrollToTop();
   };
 
   const handleCalculatorClick = (slug: string, categoryId: string) => {
     setQuery('');
     setSelectedCategory(categoryId);
     setSelectedCalculator(slug);
+    scrollToTop();
   };
 
   const headerTitle = query.trim()
@@ -210,7 +216,7 @@ export default function CalculatorsPage() {
         <div className="container-max py-10">
           <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
             <aside className="hidden lg:block">
-              <div className="sticky top-24 space-y-4">
+              <div className="sticky top-24 max-h-[calc(100vh-6rem)] space-y-4 overflow-y-auto pr-1">
                 <div className="card">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">Categories</p>
                   {renderCategoryNav()}

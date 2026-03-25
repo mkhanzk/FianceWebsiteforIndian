@@ -27,8 +27,8 @@ const Footer = () => {
           <ul className="mt-3 space-y-2 text-sm text-muted">
             <li><Link href="/tools">Tools</Link></li>
             <li><Link href="/blog">Blog</Link></li>
-            <li><Link href="/partners/banking">Partners</Link></li>
-            <li><Link href="/#lead-form">Free Plan</Link></li>
+            <li><Link href="/partners/banking">Banking Partners</Link></li>
+            <li><Link href="/partners/insurance">Insurance Partners</Link></li>
           </ul>
         </div>
         <div>
