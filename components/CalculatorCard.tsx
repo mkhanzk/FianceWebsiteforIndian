@@ -101,97 +101,93 @@ const CalculatorCard = ({ calculator }: { calculator: CalculatorConfig }) => {
         <span className="badge">Instant Results</span>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-        <div className="space-y-4">
-          {calculator.inputs.map((input) => (
-            <label key={input.id} className="block space-y-2">
-              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-muted">
-                <span>{input.label}</span>
-                <Tooltip text={input.tooltip ?? getTooltip(input.label)} />
-              </div>
-              {input.type === 'select' ? (
-                <select
-                  className="input"
-                  value={values[input.id]}
-                  onChange={(event) => handleChange(input.id, event.target.value)}
-                >
-                  {input.options?.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <input
-                      className="input"
-                      type="number"
-                      min={input.min}
-                      max={input.max}
-                      step={input.step}
-                      value={values[input.id]}
-                      onChange={(event) => handleChange(input.id, event.target.value)}
-                    />
-                    {input.unit && (
-                      <span className="min-w-[52px] text-xs font-semibold text-muted">{input.unit}</span>
-                    )}
-                  </div>
-                  {input.min !== undefined && input.max !== undefined && (
-                    <div className="space-y-1">
+      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+        <div className="rounded-2xl border border-white/10 bg-surface2/80 p-4">
+          <p className="label">Enter Details</p>
+          <div className="mt-4 space-y-4">
+            {calculator.inputs.map((input) => (
+              <label key={input.id} className="block space-y-2">
+                <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+                  <span>{input.label}</span>
+                  <Tooltip text={input.tooltip ?? getTooltip(input.label)} />
+                </div>
+                {input.type === 'select' ? (
+                  <select
+                    className="input"
+                    value={values[input.id]}
+                    onChange={(event) => handleChange(input.id, event.target.value)}
+                  >
+                    {input.options?.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
                       <input
-                        className="range"
-                        type="range"
+                        className="input"
+                        type="number"
                         min={input.min}
                         max={input.max}
-                        step={input.step ?? 1}
+                        step={input.step}
                         value={values[input.id]}
                         onChange={(event) => handleChange(input.id, event.target.value)}
                       />
-                      <div className="flex items-center justify-between text-[11px] text-muted">
-                        <span>{formatInputValue(input.min, input.unit)}</span>
-                        <span>{formatInputValue(input.max, input.unit)}</span>
-                      </div>
+                      {input.unit && (
+                        <span className="min-w-[52px] text-xs font-semibold text-muted">{input.unit}</span>
+                      )}
                     </div>
-                  )}
-                </div>
-              )}
-            </label>
-          ))}
+                    {input.min !== undefined && input.max !== undefined && (
+                      <div className="space-y-1">
+                        <input
+                          className="range"
+                          type="range"
+                          min={input.min}
+                          max={input.max}
+                          step={input.step ?? 1}
+                          value={values[input.id]}
+                          onChange={(event) => handleChange(input.id, event.target.value)}
+                        />
+                        <div className="flex items-center justify-between text-[11px] text-muted">
+                          <span>{formatInputValue(input.min, input.unit)}</span>
+                          <span>{formatInputValue(input.max, input.unit)}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div ref={resultRef} className="space-y-4 rounded-2xl bg-base/60 p-4">
+        <div ref={resultRef} className="space-y-5 rounded-2xl bg-base/60 p-4">
           <div className="grid gap-3 md:grid-cols-3">
             {result.summary.map((item) => (
-              <div key={item.label} className="rounded-2xl bg-surface p-4 shadow-card">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted">{item.label}</p>
-                <p className="mt-2 text-lg font-semibold text-text">{item.value}</p>
+              <div key={item.label} className="kpi-card">
+                <p className="kpi-label">{item.label}</p>
+                <p className="kpi-value">{item.value}</p>
                 {item.subLabel && <p className="text-xs text-muted">{item.subLabel}</p>}
               </div>
             ))}
           </div>
 
-          <div className="chart-surface h-64">
+          <div className="chart-surface h-72">
             <ChartBlock chart={result.chart} chartRef={chartRef} />
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <table className="w-full text-sm">
-              <thead className="bg-surface text-muted">
-                <tr>
-                  <th className="px-4 py-2 text-left">Metric</th>
-                  <th className="px-4 py-2 text-left">Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.breakdown.map((row) => (
-                  <tr key={row.label} className="border-t border-white/10">
-                    <td className="px-4 py-2 text-muted">{row.label}</td>
-                    <td className="px-4 py-2 text-text">{row.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="card">
+            <p className="label">Key Details</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {result.breakdown.map((row) => (
+                <div key={row.label} className="rounded-2xl border border-white/10 bg-surface2/80 p-3">
+                  <p className="text-xs text-muted">{row.label}</p>
+                  <p className="mt-1 text-sm font-semibold text-text">{row.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {result.schedule && result.schedule.length > 0 && (

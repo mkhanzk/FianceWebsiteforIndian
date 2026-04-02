@@ -1,10 +1,20 @@
-﻿import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { CalculatorConfig } from '../data/calculators';
 import CalculatorCard from './CalculatorCard';
 
-const CalculatorAccordion = ({ calculator }: { calculator: CalculatorConfig }) => {
-  const [open, setOpen] = useState(false);
+const CalculatorAccordion = ({
+  calculator,
+  defaultOpen = false
+}: {
+  calculator: CalculatorConfig;
+  defaultOpen?: boolean;
+}) => {
+  const [open, setOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    setOpen(defaultOpen);
+  }, [defaultOpen]);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-surface">

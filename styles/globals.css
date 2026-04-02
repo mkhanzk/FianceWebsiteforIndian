@@ -124,6 +124,18 @@ body {
   @apply inline-flex items-center rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent;
 }
 
+.kpi-card {
+  @apply rounded-2xl border border-white/10 bg-surface p-4 shadow-card;
+}
+
+.kpi-label {
+  @apply text-xs font-semibold uppercase tracking-[0.2em] text-muted;
+}
+
+.kpi-value {
+  @apply mt-2 text-2xl font-semibold text-text;
+}
+
 .chart-surface {
   @apply rounded-2xl border border-white/10 p-4 shadow-card;
   background: linear-gradient(135deg, rgba(11, 18, 32, 0.95), rgba(15, 23, 42, 0.9));
@@ -135,6 +147,14 @@ body {
 
 .details-summary {
   @apply flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted;
+}
+
+.details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.details-summary::marker {
+  content: '';
 }
 
 .details-meta {

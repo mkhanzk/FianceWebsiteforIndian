@@ -255,7 +255,11 @@ export default function CalculatorsPage() {
               ) : (
                 <div className="space-y-4">
                   {displayCalculators.map((calc) => (
-                    <CalculatorAccordion key={calc.slug} calculator={calc} />
+                    <CalculatorAccordion
+                      key={calc.slug}
+                      calculator={calc}
+                      defaultOpen={displayCalculators.length === 1}
+                    />
                   ))}
                 </div>
               )}
