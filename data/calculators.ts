@@ -106,6 +106,12 @@ const buildLoanResult = (principal: number, rate: number, years: number): Calcul
     interestSeries.push(Number(cumulativeInterest.toFixed(0)));
   }
 
+  const maxPoints = 36;
+  const step = Math.max(1, Math.ceil(months / maxPoints));
+  const sampledLabels = labels.filter((_, idx) => idx % step === 0);
+  const sampledPrincipal = principalSeries.filter((_, idx) => idx % step === 0);
+  const sampledInterest = interestSeries.filter((_, idx) => idx % step === 0);
+
   return {
     summary: [
       { label: 'Monthly EMI', value: formatINR(emi) },
@@ -121,18 +127,18 @@ const buildLoanResult = (principal: number, rate: number, years: number): Calcul
     chart: {
       type: 'line',
       data: {
-        labels,
+        labels: sampledLabels,
         datasets: [
           {
             label: 'Principal Paid',
-            data: principalSeries,
+            data: sampledPrincipal,
             borderColor: '#0F9D58',
             backgroundColor: 'rgba(15, 157, 88, 0.2)',
             tension: 0.35
           },
           {
             label: 'Interest Paid',
-            data: interestSeries,
+            data: sampledInterest,
             borderColor: '#0B3C5D',
             backgroundColor: 'rgba(11, 60, 93, 0.2)',
             tension: 0.35

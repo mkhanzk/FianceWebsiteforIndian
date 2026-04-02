@@ -7,8 +7,8 @@ const Pie = dynamic(() => import('react-chartjs-2').then((mod) => mod.Pie), { ss
 const Line = dynamic(() => import('react-chartjs-2').then((mod) => mod.Line), { ssr: false });
 const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), { ssr: false });
 
-const palette = ['#22c55e', '#38bdf8', '#f59e0b', '#f97316', '#a78bfa'];
-const fillPalette = ['rgba(34, 197, 94, 0.12)', 'rgba(56, 189, 248, 0.12)', 'rgba(245, 158, 11, 0.12)'];
+const palette = ['#0F9D58', '#0B3C5D'];
+const fillPalette = ['rgba(15, 157, 88, 0.18)', 'rgba(11, 60, 93, 0.16)'];
 
 const ChartBlock = ({
   chart,
@@ -33,8 +33,8 @@ const ChartBlock = ({
   }, []);
 
   const options = useMemo(() => {
-    const color = '#cbd5f5';
-    const gridColor = 'rgba(148, 163, 184, 0.18)';
+    const color = isDark ? '#cbd5f5' : '#0b3c5d';
+    const gridColor = isDark ? 'rgba(148, 163, 184, 0.16)' : 'rgba(11, 60, 93, 0.08)';
     const base: any = {
       responsive: true,
       maintainAspectRatio: false,
@@ -43,15 +43,16 @@ const ChartBlock = ({
           labels: {
             color,
             usePointStyle: true,
-            boxWidth: 10
+            boxWidth: 8,
+            padding: 16
           }
         },
         tooltip: {
-          backgroundColor: '#0b1220',
-          borderColor: 'rgba(148, 163, 184, 0.25)',
+          backgroundColor: isDark ? '#0b1220' : '#ffffff',
+          borderColor: isDark ? 'rgba(148, 163, 184, 0.25)' : 'rgba(11, 60, 93, 0.12)',
           borderWidth: 1,
-          titleColor: '#e2e8f0',
-          bodyColor: '#e2e8f0',
+          titleColor: isDark ? '#e2e8f0' : '#0b3c5d',
+          bodyColor: isDark ? '#e2e8f0' : '#0b3c5d',
           padding: 12,
           displayColors: true
         }
@@ -63,7 +64,10 @@ const ChartBlock = ({
           border: { color: gridColor }
         },
         y: {
-          ticks: { color },
+          ticks: {
+            color,
+            maxTicksLimit: 6
+          },
           grid: { color: gridColor },
           border: { color: gridColor }
         }
@@ -94,7 +98,7 @@ const ChartBlock = ({
     }
 
     return base;
-  }, [chart.type]);
+  }, [chart.type, isDark]);
 
   const styledData = useMemo(() => {
     const data: any = chart.data;
@@ -108,22 +112,26 @@ const ChartBlock = ({
           borderColor,
           backgroundColor: dataset.backgroundColor ?? fillPalette[index % fillPalette.length],
           borderWidth: 3,
-          pointRadius: 4,
-          pointHoverRadius: 6,
+          pointRadius: 0,
+          pointHoverRadius: 4,
           pointBackgroundColor: borderColor,
-          pointBorderColor: '#0b1220',
+          pointBorderColor: isDark ? '#0b1220' : '#f8fafc',
           pointBorderWidth: 2,
           tension: dataset.tension ?? 0.35,
           fill: false
         };
       }
       if (chart.type === 'bar') {
+        const values = Array.isArray(dataset.data) ? dataset.data : [];
+        const backgroundColor = values.length > 1
+          ? values.map((_: any, idx: number) => palette[idx % palette.length])
+          : palette[index % palette.length];
         return {
           ...dataset,
-          backgroundColor: dataset.backgroundColor ?? color,
-          borderColor: '#0b3c5d',
+          backgroundColor,
+          borderColor: isDark ? '#0b1220' : '#0b3c5d',
           borderWidth: 1,
-          borderRadius: 8,
+          borderRadius: 10,
           borderSkipped: false
         };
       }
@@ -135,7 +143,7 @@ const ChartBlock = ({
         return {
           ...dataset,
           backgroundColor: background,
-          borderColor: '#0b1220',
+          borderColor: isDark ? '#0b1220' : '#f8fafc',
           borderWidth: 2
         };
       }
